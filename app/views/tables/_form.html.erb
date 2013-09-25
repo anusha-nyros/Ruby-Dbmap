@@ -1,0 +1,26 @@
+<%= simple_form_for(@table, :html=>{:multipart => true, class: 'form-horizontal' }) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+<%#= text_field_tag :something, f., :readonly => true %>
+    <%= f.input :table_name,:readonly => true %>
+ <%= f.input :database_name,:readonly => true %>
+
+<%= f.input :environment,as: :select,collection: current_user.organization.environments.select(:db_environment_name).map{|x|x.db_environment_name},:prompt => "Select Environment" %>
+    <%#= f.input :database %>
+ <%= f.input :short_description,:label => 'Description', input_html: {rows: '2',cols: '2', class: 'span6'} %>
+
+    <%= f.input :table_type, as: :select, collection: ['Maintenance','Recap','Setup','Transactional','View'], :prompt => "Select Type" ,:label =>'Table Type' %>
+  <%#= f.input :feature_types, as: :select, collection: ['Feature','Section','Module'], :prompt => "Select Type" ,:label =>'Feature/Section/Module' %>
+ <%= f.input :feature_types, :label =>'Feature/Section/Module' %>
+    
+
+    <%=  f.input :top_used, as: :boolean,:label =>'Top Used Table' %>
+   <%= f.input :description,:label => 'Long Description', input_html: {rows: '5',cols: '3', class: 'span9'} %>
+
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+  </div>
+<% end %>

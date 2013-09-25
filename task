@@ -1,0 +1,5 @@
+ Rename Hosting to Environment
+ - List View as follows:  Environment Id  /  Description / User Id / IP / Link  / Notes 
+- Rename Environmen to "Instance" 
+- List Views as Follows: Environment Id / Instance Id /  Description / OS / Apps / IP / Notes 
+- Both should have the standard search option on top

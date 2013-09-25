@@ -1,0 +1,70 @@
+<script type="text/javascript">
+	$(function() {
+		// Datepicker
+		$('#datepicker').datepicker({
+			//inline: true
+			dateFormat : 'mm/dd/yy'
+		});
+	}); 
+</script>
+
+<div id="simple-search-form">
+	<%= search_form_for q,:url => search_databases_path, :html => {method: :post, class: 'well form-search'}  do |f| %>
+	<fieldset>
+		<%= f.text_field :db_environment_or_db_name_or_db_usage_or_offields_or_oftables_or_ofrecords_cont, class: "input-medium search-query" %>
+		<button type="submit" class="btn">
+			Search
+		</button>
+		&nbsp;&nbsp; <a href="#" id="advance-search">Advance</a>
+		<% end %>
+	</fieldset>
+</div>
+
+<div id="advance-search-form" style="display: none">
+	<%= search_form_for q,:url => search_databases_path, :html => {method: :post, class: 'form-horizontal'}  do |f| %>
+	<fieldset>
+		<legend>
+			Search Table
+		</legend>
+		<div class="control-group">
+			<%= f.label :db_environment_cont, "Environment", class: 'control-label' %>
+			<div class="controls">
+				<%= f.text_field :db_environment_cont %>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<%= f.label :db_name_cont, "Database", class: 'control-label' %>
+			<div class="controls">
+				<%= f.text_field :db_name_cont %>
+			</div>
+		</div>
+	<div class="control-group">
+			<%= f.label :oftables_eq, "Of Tables", class: 'control-label' %>
+			<div class="controls">
+				<%= f.text_field :oftables_eq %>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<%= f.label :ofrecords_eq, "Of Records", class: 'control-label' %>
+			<div class="controls">
+				<%= f.text_field :ofrecords_eq %>
+			</div>
+		</div>
+		<div class="control-group">
+			<%= f.label :offields_eq, "Of Fields", class: 'control-label' %>
+			<div class="controls">
+				<%= f.text_field :offields_eq%>
+			</div>
+		</div>
+
+		<div class="form-actions">
+			<%= f.submit class: 'btn btn-primary' %>
+			<input type="reset" class='btn'>
+			</input>
+			<a href="#" id="advance-search">Simple</a>
+		</div>
+	</fieldset>
+	<% end %>
+</div>

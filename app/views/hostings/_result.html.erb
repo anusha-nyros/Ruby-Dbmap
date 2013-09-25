@@ -1,0 +1,29 @@
+    <table class="table table-striped" >
+      <tr>
+        <th><%= sort_link(@q, :env_id, "Environment Id") %></th>
+        <th><%= sort_link(@q, :inst_id, "Instance Id") %></th>
+      <th><%= sort_link(@q, :description, "Description") %></th>
+      <th><%= sort_link(@q, :os, "OS") %></th>
+      <th><%= sort_link(@q, :apps, "Apps") %></th>
+      <th><%= sort_link(@q, :ip, "Ip") %></th>
+      <th><%= sort_link(@q, :notes, "Notes") %></th>
+        <th style="width:140px;"></th>
+      </tr>
+    <% @hostings.each do |hosting| %>
+     <tr>
+        <td><%= hosting.env_id %></td>
+        <td><%= hosting.inst_id %></td>
+        <td><%= simple_format(hosting.description) %></td>
+        <td><%= hosting.os %></td>
+        <td><%= simple_format(hosting.apps) %></td>
+        <td><%= hosting.ip %></td>
+  <td><%= simple_format(hosting.notes) %></td>
+        <td>
+          <%= link_to 'Details', hosting, class: 'btn btn-mini' %>
+          <%= link_to 'Edit', edit_hosting_path(hosting), class: 'btn btn-mini' %>
+          <%= link_to 'Destroy', hosting, confirm: 'Are you sure?', method: :delete, class: 'btn btn-mini btn-danger' %>
+        </td>
+     </tr>
+    <% end %>
+    </table>
+<%= paginate @hostings %>

@@ -1,0 +1,139 @@
+
+<script>
+$('document').ready(function() {
+   
+    $('.popover-test').popover({
+       placement: 'top',
+       trigger: 'hover',
+       offset: 4,   
+        });
+   
+ });
+
+</script>
+<%#= render :partial => "menu" %>
+<%#= render :partial => "activities/search_form", locals: {q: @search} %>
+
+
+  <% i = 0 %>
+ <div>
+  <div style= "float:left;">
+<h2 style="margin-left:185px;"><%= @category.name if @category %> <span style="color: #08C;font-size:22px;"> &nbsp;&nbsp;&nbsp;<%= link_to " New Pattern", new_pattern_path(category: @category), class: 'btn btn-primary' if current_user.admin? %> </span></h2> 
+  </div>
+  <div style= "float:right;">
+<p id="toggle">
+    <a class=" icon-th-large" style="cursor:pointer;" title="Pattern Image View "> </a>
+    &nbsp;&nbsp;
+    <a class="  icon-th-list" style="cursor:pointer;" title="Pattern List View " > </a>
+
+</p>
+
+  </div>
+</div>
+<div style="height:30px;"> </div>
+  
+  <div class="row">
+    <div class="pull-right">
+     <%#= sort_link @q, :name, {}, {class: 'btn btn-mini'}  %> <%#= sort_link @q, :color, {}, {class: 'btn btn-mini'} %> <%#= sort_link @q, :group, {}, {class: 'btn btn-mini'} %>
+    </div>
+  </div>
+  	<% if !@patterns.blank? %>
+       	<%= link_to "Download All Code","/download_patterns",class: 'btn' %>
+   	 <% else %>
+  	<%= link_to "Download All Code","#",class: 'btn' %>
+ 	<% end %>
+  <div class="row">
+    <div class="span2 categories well" style="margin-top:12px;padding:6px;">
+      <ul class="nav nav-list">
+        <li class="nav-header" style="color:#333;background:whiteSmoke;">Categories</li>
+       <li class="<%= @category.nil? ? "active" : "" %>"><%= link_to "All Categories", patterns_path %></li>
+        <% @categories.each do |category| %>
+        <li class="<%= category == @category ? "active" : "" %>"><%= link_to category.name, patterns_path(category: category) %></li>  
+        <% end %>
+
+      </ul>
+    </div>
+<!-- Image View Block -->
+  <div style="display:block;" id='pattern_img_view'>
+    <div id="category-list" class="span9">
+       <% if @patterns.blank? %>
+        <div class="well" style="margin-top:20px;margin-left:10px;">
+          No patterns found
+        </div>
+      <% else %>
+        <table class="foldertab">
+        <% @patterns.each do |pattern| %>
+          <% if i % 4 == 0 %>
+          <tr>
+          <% end %>
+	<% if image?(pattern.attachment.to_s) %>
+        <td style="height:200px;"> <a href="<%= pattern_path(pattern) %>"> <div style="width:175px;height:200px;text-align:center;position:relative;"><p class="imgText"><%= pattern.status%></p><%= link_to image_tag(pattern.attachment_url, :width => '175px', :height => '160px'),pattern  if pattern.attachment_url %><% if !@category.blank? %> <%= link_to pattern.name,pattern %> <% else %> <%= link_to "#{pattern.name} (#{pattern.category.try(:name)})",pattern %> <% end %> </div> </a></td>
+                            
+           <% else %>
+                 <td style="height:200px;" > <a href="<%= pattern_path(pattern) %>"> <div style="width:175px;height:200px;text-align:center;position:relative;"> <p class="imgText"><%= pattern.status %></p> <%= link_to image_tag('/assets/no_image.png', :width => '175px', :height => '160px'),pattern %><% if !@category.blank? %> <%= link_to pattern.name,pattern %> <% else %> <%= link_to "#{pattern.name} (#{pattern.category.try(:name)})",pattern %> <% end %> </div> </a> </td>
+                          
+           <% end %>
+          <% if i % 4 == 3 %>
+          </tr>
+          <% end %>
+          <% i = i + 1 %>
+        <% end %> 
+        </table>   
+         <%#= paginate @patterns %>
+      <% end %>
+    </div>
+</div>
+<!-- Image View Block -->
+<!-- Image View Block -->
+ <div style="display:none;" id='pattern_list_view'>
+   <div id="category-list" class="span9">
+       <% if @patterns.blank? %>
+        <div class="well" style="margin-top:20px;margin-left:10px;">
+          No patterns found
+        </div>
+      <% else %>
+   <table class="table table-striped" id="pattern-list" style="margin-top:15px;" >
+      <tr>
+        <th >Pattern Name</th>
+        <th >Category</th>
+        <th >Status</th>
+        <th >Sample</th>
+        <th> </th>
+      </tr>
+         <% @patterns.each do |pattern| %>
+      <tr>
+		<td><%= pattern.name %>  </td>
+		<td><%= pattern.category.try(:name) %>  </td>
+		<td><%= pattern.status %>  </td>
+		<td><%= image_tag(pattern.attachment_url, :width => '220px', :height => '150px')  if pattern.attachment_url %> </td>
+                <td><%= link_to "Detail", pattern_path(pattern), class: 'btn btn-mini'%>  </td>
+      </tr>
+      <% end %>
+    <% end %>
+    </tbody>
+    </table>
+ <%#= paginate @patterns %>
+  </div>
+  </div>
+<!-- List View Block -->
+  </div>
+
+<br/><br/>
+<style>
+.foldertab td { padding: 10px;}
+.foldertab tr { width: 700px;}
+.foldertab div a { color:#333;font-weight:bold;}
+.foldertab div a img { border-radius:3px;}
+.foldertab div a img { border:2px solid #999;}
+.imgText  {position:absolute;text-align:center; margin:0; padding:140px 0 0 120px;color:grey;}
+</style>
+   <script>
+        $(function() {        
+$('#toggle > a').click(function() {
+    var ix = $(this).index();
+
+    $('#pattern_img_view').toggle( ix === 0 );
+    $('#pattern_list_view').toggle( ix === 1 );
+});  
+        });
+    </script> 

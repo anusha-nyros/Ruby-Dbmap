@@ -1,0 +1,49 @@
+<!--Simple form for database creation-->
+<%= render :partial => "menu" %><br/>
+<%= simple_form_for @database, :html => { class: 'form-horizontal',:multipart => true} do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :db_name  ,:label =>'Database Name'%>
+    <%= f.input :db_environment  ,:label =>' Environment'%>
+    <%= f.input :db_hosting  ,:label =>'Hosting'%>
+    <%= f.association :app, collection: current_user.organization.apps, :label => 'App Name', :prompt => 'Select App'  %>
+    <%= f.input :db_technology, as: :select, collection: ['Oracle','MySQL','DB2','PostGres','Sybase'], :prompt => "Select Technology" ,:label =>'Technology' %>
+<div id="db_file" style="display:none;" >
+    <%= f.input :db_file ,:as => :file,:label => "Database File" %>
+</div>
+<div id="db_conn" style="display:block;" >
+    <%= f.input :db_connection_string ,:label =>'Connection String', input_html: {class: 'span6'} %>
+</div>
+<%= f.input :image_name ,:as => :file,:label => "Add Image" %>
+    <%= f.input :db_version ,:label =>'Version' %>
+   <%= f.input :db_usage,:label =>'Usage', input_html: {rows: '6', class: 'span7'} %>
+
+    <%= f.input :db_active,:label =>'Active'  %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit , class: 'btn btn-primary'%>
+  </div>
+<% end %>
+
+<script>
+
+$('document').ready(function(){
+
+	$('#database_db_technology').change(function(){
+		if ($(this).val() == 'Sqlite'){
+			
+			$('#db_file').css("display","block");
+			$('#db_conn').css("display","none");
+	
+		}else{
+			$('#db_file').css("display","none");	
+			$('#db_conn').css("display","block");		
+			}
+	});
+
+
+
+}) 
+</script>

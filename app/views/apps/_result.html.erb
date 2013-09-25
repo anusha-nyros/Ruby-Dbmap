@@ -1,0 +1,21 @@
+
+<table class="table table-striped">
+  <tr>
+    <th>App name</th>
+    <th>Technology</th>
+    <th>Description</th>
+    <th></th>
+  </tr>
+
+<% @apps.each do |app| %>
+  <tr>
+    <td><%= app.name %></td>
+    <td><%= app.technology %></td>
+    <td><%= app.app_desc %></td>
+    <td><%= link_to 'Show', app , class: 'btn btn-mini'%>
+    <%= link_to 'Edit', edit_app_path(app), class: 'btn btn-mini' %>
+    <%= link_to 'Destroy', app, confirm: 'Are you sure?', method: :delete, class: 'btn btn-mini btn-danger' %></td>
+  </tr>
+<% end %>
+</table>
+

@@ -1,0 +1,49 @@
+
+  <%#= stylesheet_link_tag    "application", :media => "all" %>
+<%#= javascript_include_tag "application" %>
+<style>
+	.im{
+		width:100px;
+		margin-top: 24px;
+                margin-left: 75px;
+	}
+			#view_report{
+				margin-top: 45px;
+margin-left: 111px;}
+
+</style>
+<script>
+ $(document).ready(function (){
+$('.type').attr('checked', 'checked');
+$('.clo').click(function(e){
+	 var sync_confirmation =confirm("Generating the Analysis ? ");
+	 if(sync_confirmation == true)
+	 {
+           $('#view_report').submit();
+  	   $('#show_form').hide()
+           $('#cbar').css('display', 'block');
+        } 
+	else{
+		return false
+	
+	}
+});
+ });
+</script>
+
+<div id="cbar" style="display:none;margin-top:34px;margin-left:65px   ">
+	<span style="color:black;margin-top:10px;margin-left:10px" >Generating Analysis Please wait ...</span>
+ <img src="/assets/loader.gif" class="im" />
+</div>
+
+<div id="show_form">
+<%= form_for(:at,  :url=> url_for(view_report_path),:method => :get, :html => {  :id => "view_report" } ) do |f| %>
+	<%#= form_for(:at,  :controller=> 'databases',:action => 'view_report',:method => :post, :html => {  :id => "view_report" } ) do |f| %>
+		<input type="hidden"  value=<%= @database %>  name="put_datas"></input>
+	<p><input type="checkbox" value="type"  class = "" name="type"  >&nbsp;Include Tables By Type</input></p>
+	<p><input type="checkbox" value="fields"  class = "" name="fields"  >&nbsp;Include Fields List</input></p>
+	<p><input type="checkbox" value="data"  class = "" name="data"  >&nbsp;Include Data Samples</input></p>
+	<p><input type="checkbox" value="not_used"  class = "type" name="not_used" >&nbsp;Include Tables that are not used</input></p>
+	<p><input type="button" class="clo" value="Submit"></input></p>
+<%end%>
+</div>

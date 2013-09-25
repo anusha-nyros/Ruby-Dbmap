@@ -1,0 +1,13 @@
+<%= simple_form_for @app, :html => {class: 'form-horizontal', :multipart => true  }  do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :name , :label => "App Name" %>
+    <%= f.input :technology %>
+    <%= f.input :app_desc,:label => "Description" ,input_html: {rows: '5', class: 'span7'}%>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit ,class: 'btn btn-primary' %>
+  </div>
+<% end %>

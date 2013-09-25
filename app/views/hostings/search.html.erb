@@ -1,0 +1,16 @@
+<%= render :partial => "menu" %>
+<%= render :partial => "search_form", locals: {q: @q} %>
+<div id="search-result">
+  <% if @hostings.blank? %>
+    <% if params[:q] %>
+       <h3>Search Result - Instances</h3>
+       <p class="well">No records found</p>
+	    <% else %>
+		    <p>Your search does not generate a result</p>
+    <% end %>
+  <% else %>
+    <h3>Search Result - Instances</h3>
+  	<div style="float:right;margin-right:20px;"><% unless @hostings.blank? %>[<%= @hostings.count %>] Records Found<% end %></div>
+	<%= render :partial => "result" %>
+	<% end %>
+</div>

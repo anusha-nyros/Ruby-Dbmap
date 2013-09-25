@@ -1,0 +1,19 @@
+
+<style>
+	.notes_label{
+          font-weight: bold;	
+	}
+</style>
+<%= simple_form_for(@environment) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :db_environment,:label => 'Environment' %>
+    <%= f.input :db_environment_name ,:label => 'Name'%>
+    <%= f.input :notes,:label =>'Notes', input_html: {rows: '6', class: 'span7'},label_html:{class: 'notes_label'} %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+  </div>
+<% end %>

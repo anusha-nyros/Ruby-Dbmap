@@ -1,0 +1,116 @@
+ <style>
+	#canvasloader-container{
+				color:black;
+				position:relative;
+				top:15px;
+				left:89px;
+                           margin-bottom:-29px;
+
+				margin-top:5px;
+		}
+#canvasLoader{
+top:-71px !important;
+}
+
+</style>
+
+<div style= "float:right; margin-top:5px">
+<p id="toggle">
+    <a class="  icon-th-list" style="cursor:pointer;" title=" List View " > </a>
+    &nbsp;&nbsp;
+    <a class=" icon-th-large" style="cursor:pointer;" title="Block View "> </a>
+
+</p>
+  </div>
+  
+<%= render :partial => "menu" %>
+<% if !@databases.nil? %>
+<%= render :partial => "databases/search_form", locals: {q: @q} %>
+<% end %>
+<div>
+<h1 style = ""> Databases </h1>
+<div class="pbar" style="display:none; float:right;  ">
+
+	<div id="canvasloader-container" class="wrapper">	<span class="matter" style="position:relative;top:-94px;left:-96px">"Generating Analysis"
+			please Wait...</span> </div>
+	<script type="text/javascript">
+		var cl = new CanvasLoader('canvasloader-container');
+		cl.setDiameter(40);
+
+	  cl.setColor('#00bbff'); 
+		cl.show();
+		var loaderObj = document.getElementById("canvasLoader");
+		loaderObj.style.position = "absolute";
+  		loaderObj.style["top"] = cl.getDiameter() * -0.5 + "px";
+  		loaderObj.style["left"] = cl.getDiameter() * -0.5 + "px";
+    </script>
+</div>
+</div>
+  <% if @listv %>
+
+
+   <div style="display:block;" id='list_view'>
+
+<% if @databases.blank? %>
+  <div class="well">You don't currently have any databases </div>
+<% else %>
+	<%#= link_to "DataView",dataview_databases_path %>
+	<%= render 'result' %>
+<% end %>
+<% if @obj %>
+	<%= form_for(:at,  :controller=> 'databases',:action =>'index', :method => :get, :html => {  :id => "th" } ) do |f| %>
+		<input type="hidden" name="put_data" value=" <%= @obj %>"/>
+	<%end%>
+<script>
+	$(document).ready(function (){
+	$('#th').submit();
+ });
+
+
+</script>
+<%end%>
+
+</div>
+
+ <div style="display:none;" id='block_view'>
+  <%= render 'db_block_view' %>
+</div>
+
+  <% else %>
+  <div style="display:block;" id='block_view'>
+  <%= render 'db_block_view' %>
+</div>
+   <div style="display:none;" id='list_view'>
+
+
+<% if @databases.blank? %>
+  <div class="well">You don't currently have any tables </div>
+<% else %>
+	<%#= link_to "DataView",dataview_databases_path %>
+	<%= render 'result' %>
+<% end %>
+<% if @obj %>
+	<%= form_for(:at,  :controller=> 'databases',:action =>'index', :method => :get, :html => {  :id => "th" } ) do |f| %>
+		<input type="hidden" name="put_data" value=" <%= @obj %>"/>
+	<%end%>
+<script>
+	$(document).ready(function (){
+	$('#th').submit();
+ });
+
+
+</script>
+<%end%>
+</div>
+<%end%>
+
+   <script>
+        $(function() {        
+$('#toggle > a').click(function() {
+    var ix = $(this).index();
+
+    $('#list_view').toggle( ix === 0);
+    $('#block_view').toggle( ix === 1 );
+});  
+        });
+</script> 

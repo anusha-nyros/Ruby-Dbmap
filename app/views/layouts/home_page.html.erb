@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>DB Map</title>
+<!-- <link href="/assets/style.css" type="text/css" rel="stylesheet" /> -->
+ <link rel="icon" type="image/png" href="/assets/favicon.png" />
+<style>
+*{
+	margin:0;
+	padding:0;
+}
+body,html{
+	height:100%;
+}
+body{
+	background:#aed4ee;
+}
+img.bg{
+	/* Set rules to fill background */
+	min-height: 100%;
+	min-width: 1024px;
+	
+	/* Set up proportionate scaling */
+	width: 100%;
+	height: auto;
+	
+	/* Set up positioning */
+	position: fixed;
+	top: 20%;
+	left: 0;
+}
+
+@media screen and (max-width: 1024px){
+	img.bg{
+	left: 50%;
+	margin-left: -512px; 
+	}
+}
+#main-wrapper{
+	width:100%;
+	height:auto;
+	position:relative;
+	z-index:1;
+}
+#main-inner-wrapper{
+	width:100%;
+	background:url(/assets/home_page/orange.jpg) repeat-x;
+}
+#main{
+	width:80%;
+	margin:0 auto;
+    
+}
+#header{
+	width:100%;
+	height:auto;
+    padding-bottom:20px;
+     position:relative;
+}
+#logo{
+ 	bottom: 15px;
+    float: right;
+    position: absolute;
+    right: 0;
+    width: 370px;
+}
+.sub-blk{
+	width:25%;
+    float:left;
+}
+#hd-ui-pattern{
+	float: left;
+    margin-top: 80px;
+    width: 20%;
+font-family: Arial;
+font-size: 60px;
+color: white;
+}
+#hd-ui-pattern img,
+#logo img{
+	width:100%;
+}
+#login-box{
+	width:370px;
+	height:270px;
+	background:#4a555d;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	float:right;
+	margin-top:20px;
+	text-indent:20px;
+}
+#login-box h1{
+	color:#ffffff;
+	font:26px Myriad Pro, Arial, Helvetica, sans-serif;
+       margin-left:27px;
+	padding-top:15px;
+}
+#login-box h3{
+	color:#ffffff;
+	font:17px Myriad Pro, Arial, Helvetica, sans-serif;
+       margin-left:23px;
+}
+.login-btn{
+	width:156px;
+	height:33px;
+	background:url(/assets/home_page/login.png) no-repeat;
+	display:block;
+	float:left;
+	margin-top:10px;
+	margin-left:20px;/*padding-right:-160px;*/
+        border:0px;
+} 
+#login-box input[type="text"],#login-box input[type="password"]{
+				width:228px;
+				height:20px;
+				background:#Fff;
+				border:0;
+				-webkit-border-radius: 2px;
+				-moz-border-radius: 2px;
+				border-radius: 3px;
+				color:#444;
+				font-size:16px;
+				padding:6px;
+                                margin-bottom:16px;
+			}
+.signin-btn{
+font-family:Tahoma;
+
+        color:white;
+	display:block;
+	float:left;
+        border:0px;
+} 
+.clear{clear:both}
+.user_name{
+font-family:Tahoma;
+font-size:12px;
+color:#FFFFFF;
+text-decoration:none;
+padding:20px 0px 0px 22px;
+
+}
+.error{ 
+font-size:22px; float:right; text-align:right;
+margin-top:130px;
+margin-right:100px;
+}
+
+</style>
+</head>
+
+<body>
+<img src="/assets/home_page/bg.jpg"  class="bg"/>
+<div id="main-wrapper">
+	<div id="main-inner-wrapper">
+    	<div id="main">
+        	<div id="header">
+		<div id="notifications"> <% [:error, :notice, :alert].each do |type| %> 
+		<% if flash[type] %> 
+		<%#= content_tag :div, class: "alert #{alert_class(type)}" do %> 
+		<div class="error"><span style="color:white;"> 
+			<%= flash[type] %></span></div> <% end %> 
+			<% end %> 
+		</div>
+            	<!--<div id="logo"><div class="sub-blk"><img src="/assets/home_page/tw.png" /></div></div> -->
+                <div id="hd-ui-pattern"> <!-- <img src="/assets/home_page/iap-logo.png" /> -->  DB Map </div>
+                <div class="clear"></div>
+            </div>
+            
+            <div id="login-box">
+            	<h1>Sign In</h1>
+             <%= form_tag sessions_path  do %>
+<!-- <div class="user_name">USERNAME&nbsp;&nbsp;<%#= text_field_tag :username, nil ,class:"input_box" %></div>
+<div class="user_name">PASSWORD&nbsp;&nbsp;<%#= password_field_tag :password,nil,class:"input_box" %></div>
+ <div class="controls"><%= submit_tag "" ,class:"login-btn"%>  <%#= link_to "Sign Up", signup_path, class: 'btn btn-success' %> </div> -->
+		<table cellpadding="0" cellspacing="0" style="margin:18px 10px 10px 30px;">
+		<tr>
+			<td>
+				<input id="username" type="text" placeholder="user id" name="username"><br>
+			 </td>
+		</tr>
+		<tr >
+			<td>
+				<input id="password" type="password" name="password" placeholder="password"><br>
+			</td>
+		</tr>
+		<tr >
+			<td>
+			        <%= submit_tag "" ,class:"login-btn" %>
+			</td>
+		</tr>
+		<tr >
+			<td style="color:white;margin-left:60px;marhin-top:10px;"> <br/>
+			<%= link_to "Don't you have an account? SignUp","/signup",class:"signin-btn" %>
+			</td>
+		</tr>
+		</table>
+  <% end -%>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

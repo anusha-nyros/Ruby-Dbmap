@@ -1,0 +1,15 @@
+<ul class="nav nav-tabs">
+  <li class="<%= action_active('index') %>">
+    <%= link_to apps_path do %>
+        <i class="icon-list-alt"></i>
+        Index
+    <% end %>
+  </li>
+  
+  <li class="<%= action_active('new') %>">
+    <%= link_to new_app_path do %>
+      <i class="<%= green_icon %>"></i>
+      Create App
+    <% end %>
+  </li>
+</ul>

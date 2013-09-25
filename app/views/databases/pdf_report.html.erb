@@ -1,0 +1,404 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<br/>
+
+<style>
+.data_text {margin-left:50px;}
+.all_fields td {border:1px solid black;}
+.all_fields th {border:1px solid black;}
+.all_fields table {border:1px solid black;}
+.single_row td {border:1px solid black;}
+.all_fields {  overflow: hidden;}
+</style>
+<% @tables_count = @document.tables.length %>
+<% @tables_not_used = @document.tables.where(:ofrows => 0).count %>
+
+<center><h2 style="margin-left:80px;"> <u>Databases info</u> </h2></center>
+	<table style="width:800px;margin-left:50px;text-align:center;" cellspacing=0 cellpadding=0 >
+	    <tr style="background-color:#8EB2E2;height:50px;"  >
+		<th border=0> Database</th>
+		<th border=0> Active Tables</th>
+		<th border=0> Total Tables</th>
+		<th border=0> #Of Rows </th>
+		<th border=0> Total Fields</th>
+	    </tr>
+
+	    <tr>
+		<td> <b><%= @document.db_name %></b></td>
+		<td> <%= @document.tables.length - @tables_not_used  %></td>
+		<td> <%= @document.tables.length %></td>
+		<td> <%=  @document.tables.sum('ofrows') %></td>
+		<td> <%= @document.tables.sum('ofcolumns') %></td>
+
+            </tr>
+	   <tr><td colspan=5 ></td> </tr>	
+	    <tr>
+		<td> Grand totals</td>
+		<td> <%= @document.tables.length - @tables_not_used %></td>
+		<td> <%= @document.tables.length %></td>
+		<td> <%=  @document.tables.sum('ofrows') %></td>
+		<td> <%= @document.tables.sum('ofcolumns') %></td>
+
+            </tr>	
+		
+</table> <br/> <br/>
+<h2 class="data_text"> Database : <%= @document.db_name %> </h2> 
+<h2 class="data_text"> Summary </h2> 
+		<table style="width:800px;margin-left:50px;text-align:center;" cellspacing=0 cellpadding=0 >
+	    <tr style="background-color:#8EB2E2;height:36px;"  >
+		<th> Active Tables</th>
+		<th> Tables Not Used </th>
+		<th> Total Tables</th>
+		<th> Total records </th>
+		<th> Total Fields</th>
+		<th> Estimated Size</th>
+	    </tr>
+
+	    <tr>
+		<td> <%= @document.tables.length - @tables_not_used %></td>
+		<td> <%= @tables_not_used %></td>
+		<td> <%= @document.tables.length %></td>
+		<td> <%=  @document.tables.sum('ofrows') %></td>
+		<td> <%= @document.tables.sum('ofcolumns') %></td>
+		<td> <%=  %></td>
+            </tr>	
+</table> <br/> <br/>
+<% @main_table_cnt = @document.tables.where(:table_type => 'Maintenance') %>
+<% @recap_table_cnt = @document.tables.where(:table_type => 'Recap') %>
+<% @setup_table_cnt = @document.tables.where(:table_type => 'Setup') %>
+<% @trans_table_cnt = @document.tables.where(:table_type => 'Transaction') %>
+<% @view_table_cnt = @document.tables.where(:table_type => 'View') %>
+<% @grand_of_tables = @main_table_cnt.length + @recap_table_cnt.length + @setup_table_cnt.length + @view_table_cnt.length + @trans_table_cnt.length + @document.tables.where(:ofrows => 0).length %>
+<% @grand_of_rows =  @main_table_cnt.sum('ofrows') + @recap_table_cnt.sum('ofrows') + @setup_table_cnt.sum('ofrows') + @trans_table_cnt.sum('ofrows') + @view_table_cnt.sum('ofrows') + @document.tables.where(:ofrows => 0).sum('ofrows') %>
+
+<% @grand_of_cols =  @main_table_cnt.sum('ofcolumns') + @recap_table_cnt.sum('ofcolumns') + @setup_table_cnt.sum('ofcolumns') + @trans_table_cnt.sum('ofcolumns') + @view_table_cnt.sum('ofcolumns') + @document.tables.where(:ofrows => 0).sum('ofcolumns') %>
+
+<h2 class="data_text"> Recap by Table Type </h2> <br/>
+		<table style="width:800px;margin-left:50px;text-align:center;" cellspacing=0 cellpadding=0 >
+	    <tr style="background-color:#8EB2E2;height:36px;" >
+		<th> Table Type </th>
+		<th> # Of Tables </th>
+		<th> # Of Rows</th>
+		<th> # Of Fields </th>
+	    </tr>
+
+	    <tr>
+		<td> Maintenance </td>
+		<td> <%= @main_table_cnt.length %></td>
+		<td> <%= @main_table_cnt.sum('ofrows') %></td>
+		<td> <%= @main_table_cnt.sum('ofcolumns') %></td>
+            </tr>
+	    <tr>
+		<td> Recap </td>
+		<td> <%= @recap_table_cnt.length %></td>
+		<td> <%= @recap_table_cnt.sum('ofrows') %></td>
+		<td> <%= @recap_table_cnt.sum('ofcolumns') %></td>
+            </tr>
+	    <tr>
+		<td> Setup </td>
+		<td> <%= @setup_table_cnt.length %></td>
+		<td> <%= @setup_table_cnt.sum('ofrows') %></td>
+		<td> <%= @setup_table_cnt.sum('ofcolumns') %></td>
+            </tr>	
+	    <tr>
+		<td> Transaction </td>
+		<td> <%= @trans_table_cnt.length %></td>
+		<td> <%= @trans_table_cnt.sum('ofrows') %></td>
+		<td> <%= @trans_table_cnt.sum('ofcolumns') %></td>
+            </tr>
+	    <tr>
+		<td> View  </td>
+		<td> <%= @view_table_cnt.length %></td>
+		<td> <%= @view_table_cnt.sum('ofrows') %></td>
+		<td> <%= @view_table_cnt.sum('ofcolumns') %></td>
+            </tr>
+	    <tr>
+		<td> Not Used </td>
+		<td> <%= @document.tables.where(:ofrows => 0).length %></td>
+		<td> <%= @document.tables.where(:ofrows => 0).sum('ofrows') %></td>
+		<td> <%= @document.tables.where(:ofrows => 0).sum('ofcolumns') %></td>
+            </tr>
+	    <tr class="single_row">
+		<td > Grand Totals  </td>
+		<td > <%= @grand_of_tables %></td>
+		<td > <%= @grand_of_rows %> </td>
+		<td > <%= @grand_of_cols %></td>
+            </tr>
+</table> <br/> <br/>
+
+<h3 class="data_text"> All tables info: </h3> 
+	<table style="width:800px;margin-left:50px;text-align:center;" cellspacing=0 cellpadding=0 class="all_fields">
+	    <tr style="background-color:#8EB2E2;height:36px;border:1px solid black;" >
+		<th> Table Name</th>
+		<th> Usage</th>
+		<th> Table Type</th>
+		<th> Of Rows </th>
+		<th> Used?</th>
+	    </tr>
+	<% @document.tables.each do |t| %>
+
+	    <tr>
+		<td> <b><%= t.table_name %></b></td>
+		<td> <%= t.description %></td>
+		<td> <%= t.table_type %></td>
+		<td> <%= t.ofrows %></td>
+                <% if t.ofrows != 0 %>
+		<td><%= 'Yes' %></td>
+		<% else %>
+		<td><%= 'No' %></td>
+		<% end %>
+	    </tr>		
+		
+	<% end %>
+</table>
+
+<h3 class="data_text"> Maintenance(<%= @main_table_cnt.length %> Table(s) )</h3> 
+		<table style="width:800px;margin-left:50px;text-align:center;" cellspacing=0 cellpadding=0 class="all_fields">
+	    <tr style="background-color:#8EB2E2;height:36px;" >
+		<th> Table Name</th>
+		<th> Usage </th>
+		<th> Table Type</th>
+		<th> #Of Rows </th>
+		<th> Used?</th>
+	    </tr>
+<% @main_table_cnt.each do |m| %>
+	    <tr>
+		<td> <%= m.table_name %> </td>
+		<td><%= m.description %>  </td>
+		<td> <%= m.table_type %> </td>
+		<td> <%= m.ofrows %> </td>
+		<% if m.ofrows == 0 %>
+<td> <%= "No" %> </td>
+<% else %>
+<td> <%= "Yes" %> </td>
+<% end %>
+            </tr>	
+	<% end %>
+</table> <br/> <br/>
+<h3 class="data_text"> Recap(<%= @recap_table_cnt.length %> Table(s)) </h3> 
+		<table style="width:800px;margin-left:50px;text-align:center;" cellspacing=0 cellpadding=0 class="all_fields">
+	    <tr style="background-color:#8EB2E2;height:36px;" >
+		<th> Table Name</th>
+		<th> Usage </th>
+		<th> Table Type</th>
+		<th> #Of Rows </th>
+		<th> Used?</th>
+	    </tr>
+
+<% @recap_table_cnt.each do |m| %>
+	    <tr>
+		<td> <%= m.table_name %> </td>
+		<td><%= m.description %>  </td>
+		<td> <%= m.table_type %> </td>
+		<td> <%= m.ofrows %> </td>
+		<% if m.ofrows == 0 %>
+<td> <%= "No" %> </td>
+<% else %>
+<td> <%= "Yes" %> </td>
+<% end %>
+            </tr>	
+	<% end %>	
+</table> <br/> <br/>
+<h3 class="data_text"> Setup(<%= @setup_table_cnt.length %> Table(s))</h3> 
+		<table style="width:800px;margin-left:50px;text-align:center;" cellspacing=0 cellpadding=0 class="all_fields">
+	    <tr style="background-color:#8EB2E2;height:36px;" >
+		<th> Table Name</th>
+		<th> Usage </th>
+		<th> Table Type</th>
+		<th> #Of Rows </th>
+		<th> Used?</th>
+	    </tr>
+
+<% @setup_table_cnt.each do |m| %>
+	    <tr>
+		<td> <%= m.table_name %> </td>
+		<td><%= m.description %>  </td>
+		<td> <%= m.table_type %> </td>
+		<td> <%= m.ofrows %> </td>
+		<% if m.ofrows == 0 %>
+<td> <%= "No" %> </td>
+<% else %>
+<td> <%= "Yes" %> </td>
+<% end %>
+            </tr>	
+	<% end %>	
+</table> <br/> <br/>
+<h3 class="data_text"> Transaction(<%= @trans_table_cnt.length %> Table(s)) </h3> 
+		<table style="width:800px;margin-left:50px;text-align:center;" cellspacing=0 cellpadding=0 class="all_fields">
+	    <tr style="background-color:#8EB2E2;height:36px;" >
+		<th> Table Name</th>
+		<th> Usage </th>
+		<th> Table Type</th>
+		<th> #Of Rows </th>
+		<th> Used?</th>
+	    </tr>
+
+<% @trans_table_cnt.each do |m| %>
+	    <tr>
+		<td> <%= m.table_name %> </td>
+		<td><%= m.description %>  </td>
+		<td> <%= m.table_type %> </td>
+		<td> <%= m.ofrows %> </td>
+		<% if m.ofrows == 0 %>
+<td> <%= "No" %> </td>
+<% else %>
+<td> <%= "Yes" %> </td>
+<% end %>
+            </tr>	
+	<% end %>	
+</table> <br/> <br/>
+<h3 class="data_text"> View(<%= @view_table_cnt.length %> Table(s)) </h3> 
+		<table style="width:800px;margin-left:50px;text-align:center;" cellspacing=0 cellpadding=0 class="all_fields">
+	    <tr style="background-color:#8EB2E2;height:36px;" >
+		<th> Table Name</th>
+		<th> Usage </th>
+		<th> Table Type</th>
+		<th> #Of Rows </th>
+		<th> Used?</th>
+	    </tr>
+
+<% @view_table_cnt.each do |m| %>
+	    <tr>
+		<td> <%= m.table_name %> </td>
+		<td><%= m.description %>  </td>
+		<td> <%= m.table_type %> </td>
+		<td> <%= m.ofrows %> </td>
+		<% if m.ofrows == 0 %>
+<td> <%= "No" %> </td>
+<% else %>
+<td> <%= "Yes" %> </td>
+<% end %>
+            </tr>	
+	<% end %>	
+</table> <br/> <br/>
+<h3 class="data_text"> Not Used(<%= @document.tables.where(:ofrows => 0).length %> Table(s)) </h3> 
+		<table style="width:800px;margin-left:50px;text-align:center;" cellspacing=0 cellpadding=0 class="all_fields">
+	    <tr style="background-color:#8EB2E2;height:36px;" >
+		<th> Table Name</th>
+		<th> Usage </th>
+		<th> Table Type</th>
+		<th> #Of Rows </th>
+		<th> Used?</th>
+	    </tr>
+
+<% @document.tables.where(:ofrows => 0).each do |m| %>
+	    <tr>
+		<td> <%= m.table_name %> </td>
+		<td><%= m.description %>  </td>
+		<td> <%= m.table_type %> </td>
+		<td> <%= m.ofrows %> </td>
+		<% if m.ofrows == 0 %>
+<td> <%= "No" %> </td>
+<% else %>
+<td> <%= "Yes" %> </td>
+<% end %>
+            </tr>	
+	<% end %>	
+</table> <br/> <br/>
+<h3 class="data_text"> Active(<%= @document.tables.length - @tables_not_used %> Table(s)) </h3> 
+		<table style="width:800px;margin-left:50px;text-align:center;" cellspacing=0 cellpadding=0  class="all_fields">
+	    <tr style="background-color:#8EB2E2;height:36px;" >
+		<th> Table Name</th>
+		<th> Usage </th>
+		<th> Table Type</th>
+		<th> #Of Rows </th>
+		<th> Used?</th>
+	    </tr>
+<% @activ_tables = @document.tables.where('ofrows != 0') %>
+<% @activ_tables.each do |m| %>
+	    <tr>
+		<td> <%= m.table_name %> </td>
+		<td><%= m.description %>  </td>
+		<td> <%= m.table_type %> </td>
+		<td> <%= m.ofrows %> </td>
+		<% if m.ofrows == 0 %>
+<td> <%= "No" %> </td>
+<% else %>
+<td> <%= "Yes" %> </td>
+<% end %>
+            </tr>	
+	<% end %>	
+</table> <br/> <br/>
+
+<h3 class="data_text"> Not Active(<%= @tables_not_used %> Table(s)) </h3> 
+		<table style="width:800px;margin-left:50px;text-align:center;" cellspacing=0 cellpadding=0 class="all_fields">
+	    <tr style="background-color:#8EB2E2;height:36px;" >
+		<th> Table Name</th>
+		<th> Usage </th>
+		<th> Table Type</th>
+		<th> #Of Rows </th>
+		<th> Used?</th>
+	    </tr>
+<% @inactiv_tables = @document.tables.where(:ofrows => 0) %>
+<% @inactiv_tables.each do |m| %>
+	    <tr>
+		<td> <%= m.table_name %> </td>
+		<td><%= m.description %>  </td>
+		<td> <%= m.table_type %> </td>
+		<td> <%= m.ofrows %> </td>
+		<% if m.ofrows == 0 %>
+<td> <%= "No" %> </td>
+<% else %>
+<td> <%= "Yes" %> </td>
+<% end %>
+            </tr>	
+	<% end %>	
+</table> <br/> <br/>
+<!---------------- table wise display -->
+	<% @document.tables.each do |t| %>
+	<br/>
+	<span class="data_text" >Table Name:<b> <%= t.table_name %></b></span><br/>
+	<span class="data_text" >Usage: <%= t.description %></span><br/>
+	<span class="data_text" >#of Rows: <%= t.ofrows %></span><br/>
+		<table style="width:800px;margin-left:50px;text-align:center;border:1px solid black;" cellspacing=0 cellpadding=0  class="all_fields">
+	    <tr style="background-color:#8EB2E2;height:36px;" >
+		<th> Field</th>
+		<th> Type </th>
+		<th> Size</th>
+		<th> Dec </th>
+		<th> Usage</th>
+	    </tr>
+<% t.fields.each do |m| %>
+	    <tr>
+		<td><%= m.field_name %> </td>
+		<td><%= m.field_type %> </td>
+		<td><%= m.field_size %> </td>
+		<td> <%=  %></td>
+		<td> <%= m.description %></td>
+            </tr>
+<% end %>	
+</table> <br/> <br/>
+
+	<% end %>
+<!------------------------------------------ -->
+<h3 class="data_text"> All fields info: </h3> <br/>
+<!-------------total Fields------------ -->
+		<table style="width:800px;margin-left:50px;text-align:center;border:1px solid black;" cellspacing=0 cellpadding=0  class="all_fields">
+	    <tr style="background-color:#8EB2E2;height:36px;" >
+		<th> Field</th>
+		<th> Type </th>
+		<th> Size</th>
+		<th> Dec </th>
+		<th> Usage</th>
+		<th>Table Name</th>
+	    </tr>
+<% @document.tables.each do |t| %>
+      <% t.fields.each do |f| %>
+	    <tr>
+		<td > <%= f.field_name %></td>
+		<td> <%= f.field_type %></td>
+		<td> <%= f.field_size %></td>
+		<td> </td>
+		<td> <%= %></td>
+		<td> <%= t.table_name %></td>
+            </tr>
+	<% end %>
+	<% end %>
+</table> <br/> <br/><br/> <br/><br/> <br/><br/> <br/>
+<!-------------total Fields------------ -->
+
+
+</html>   
+

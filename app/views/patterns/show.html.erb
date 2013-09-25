@@ -1,0 +1,164 @@
+<%#= render :partial => "menu" %>
+<% @category1 = @pattern.category %>
+<div>
+<div style="float:left;">
+
+   <div class="span2 categories well" style="margin-top:55px;padding:6px;">
+      <ul class="nav nav-list">
+        <li class="nav-header" style="color:#333;background:whiteSmoke;">Categories</li>
+       <li ><%= link_to "All Categories", patterns_path %></li>
+        <% @categories.each do |category| %>
+        <li  class="<%= category == @category1 ? "active" : "" %>"><%= link_to category.name, patterns_path(category: category) %></li>  
+        <% end %>
+
+      </ul>
+    </div>
+</div>
+<div style="float:right;width:700px;"> <!--  Right Block -->
+<div class="well1" id='category-info'>
+  <p>
+    <div class="row">
+      <div class="span11">
+        <h2 style="color: <%= @pattern.fontcolor %>"><%= @pattern.name %> <%= link_to "edit",edit_pattern_path(@pattern),class: 'btn btn-medium',:style=>"margin-left: 150px;" if current_user.admin? %></h2>
+      </div>
+    </div>
+  </p>
+<div> <!-- main div for the image block -->
+<div style="float:left;"> <!-- div for the image block -->
+ <% if @pattern.attachment_url %>
+  <p>
+
+   <%#= link_to image_tag(@pattern.attachment_url, :width => '400px', :height => '300px'),@pattern   ,id: 'fancybox' %>
+<a id="pattern_img" href="#pat_img"   >
+	<%= image_tag(@pattern.attachment_url, :width => '400px', :height => '300px') %>
+</a>
+<div style="display:none"><div id="pat_img"><%= image_tag(@pattern.attachment_url)  %></div></div>
+  </p>
+<% else %>
+  <p>
+<a id="pattern_img" href="#pat_img">	<%= image_tag('/assets/no_image.png', :width => '400px', :height => '300px') %></a>
+<div style="display:none"><div id="pat_img"><%= image_tag('/assets/no_image.png')  %></div></div>
+   <%#= link_to image_tag('/assets/no_image.png', :width => '400px', :height => '300px'),@pattern  ,class: 'fancybox' %>
+  </p>
+<% end %>
+<br/>
+</div> <!-- end div for the image block -->
+<div style="float:left;margin-left:20px;line-height:30px;"> <!--div for the view code /image block -->
+
+<a id="pattern_img_view" href="#pat_img_view" style="font-weight:bold;">View Full Size Image </a> <br/>
+<% if !@pattern.pat_html.blank? || !@pattern.pat_css.blank?  || !@pattern.pat_js.blank? %>
+<!-- <a id="pattern_view" href="#pat_view" style="font-weight:bold;">View Code Sample</a> <br/> -->
+<a id="pattern_code_view" href="#pat_code_view" style="font-weight:bold;">View Code</a>
+<% end %>
+<!-- Light box view for full size image  view -->
+	<div style="display:none;">
+		<div id="pat_img_view">
+                <% if @pattern.attachment_url %>  <%= image_tag(@pattern.attachment_url)  %> <% else %> <%= image_tag('/assets/no_image.png')  %> <% end %>
+		</div>
+	</div>
+<!-- End Light box view for full size imageview -->
+<!-- Light box view for sample view -->
+	<div style="display:none;width:700px;">
+		<div id="pat_view">
+ 		<% if !@pattern.pat_html.blank? || !@pattern.pat_css.blank?  || !@pattern.pat_js.blank? %>
+		<%#= render :partial => 'pattern_image_view' %>
+		<% end %>
+		</div>
+	</div>
+<!-- End Light box view for sample view -->
+<!-- Light box view for code  view -->
+	<div style="display:none;">
+		<div id="pat_code_view"> <h2> <%= @pattern.name %></h2>
+            	 <div id="tabs" >
+               
+  		<ul >
+    		<li><a href="#tabs-1">HTML</a></li>
+    		<li><a href="#tabs-2">CSS</a></li>
+    		<li><a href="#tabs-3">JS</a></li>
+  		</ul>
+  		<div id="tabs-1">
+                  <p> <textarea class="text optional span8" cols="40"  rows="15"> <%= @pattern.pat_html %> </textarea> </p>
+  		</div>
+  		<div id="tabs-2">
+   		 	
+                  <p> <textarea class="text optional span8" cols="40"  rows="15"> <%= @pattern.pat_css %> </textarea></p>
+  		</div>
+  		<div id="tabs-3">
+    			
+                 <p> <textarea class="text optional span8" cols="40"  rows="15"> <%= @pattern.pat_js %> </textarea> </p>
+    		</div>
+               
+               </div>
+	</div> <!-- End  Light box view for code  view -->
+</div>
+</div>  <!-- end div for the view code /image block -->
+</div>
+<div  style="float:left;" > <!-- div for the show block -->
+ <% if  @pattern.asset_attachment_url %>
+<p>
+  <%#= link_to "Download All Code for this Pattern", @pattern.asset_attachment_url,:class=> 'btn' %>
+<%= link_to "Download All Code for this Pattern", {:id => @pattern.id,:action=>'download_single_pattern'} , :class=> 'btn' %>
+</p>
+<% else %>
+<p>
+
+  <%#= link_to "Download All Code for this Pattern", "#",:class=> 'btn' %>
+<%= link_to "Download All Code for this Pattern",{:id => @pattern.id, :action=>'download_single_pattern'} ,  :class=> 'btn' %>
+</p>
+<% end %>
+<br/>
+<p>
+<b class ="usage_text"> What problem does the pattern solve ? </b> <br/>
+<%= simple_format(@pattern.what_problem) %>
+</p>
+
+<br/>
+
+<p>
+<b class ="usage_text"> When to use it ?</b> <br/>
+<%= simple_format(@pattern.when_used) %>
+</p>
+
+<br/>
+<p>
+<b class ="usage_text"> How to use it ?</b> <br/>
+<%= simple_format(@pattern.how_used) %>
+
+</p>
+
+  <br/><br/><br/>
+  <p class ="usage_text">
+   
+    <%= link_to "delete", pattern_path(@pattern), method: :delete, confirm: 'Are you sure?', class: 'btn btn-danger' if current_user.admin? %>
+  </p>  
+</div>
+</div> <!-- End for Right Block -->
+</div>
+</div> <!-- div for the show block -->
+<style>
+.usage_text { font-size:20px; }
+.usage_text img { border-radius:3px;}
+#pattern_img img {border-radius:3px;border:3px solid #999;}
+.ui-widget-header { border: 1px solid whiteSmoke; background: whiteSmoke ; color: #ffffff; font-weight: bold; }
+</style>
+<script type="text/javascript">
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+	$(document).ready(function() {
+    
+	$("a#pattern_img").fancybox({
+		'hideOnContentClick': true
+	});
+	$("a#pattern_code_view").fancybox({
+		'hideOnContentClick': true
+	});
+	$("a#pattern_view").fancybox({
+		'hideOnContentClick': true
+	});
+	$("a#pattern_img_view").fancybox({
+		'hideOnContentClick': true
+	});
+
+	});
+</script>

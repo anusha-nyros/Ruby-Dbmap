@@ -1,0 +1,91 @@
+<div class="well"> 
+<div id="well simple-search-form">
+        <p>  <b>Search Via Tables and fields  </b></p><br/>
+<table id ="search_inp" >
+<tr> 
+  <td>
+
+
+	<%= search_form_for q,:url => db_search_databases_path, :html => {method: :post, class: 'form-search form-horizontal'}  do |f| %>
+        <div class="control-group ">
+
+			
+			<div class="control-group">
+                          <label ><b>Database&nbsp;&nbsp;</b> </label>	
+			  <select id = "db_id"  name = "db_id" onchange ="db_change();" >
+			   <option value ="">Please select</option>
+			  	<% @db_list.each do |x| %>
+			  	<option value="<%= x.id %>"><%= x.db_name %></option>
+			  	<% end %>
+			  </select>
+                        </div>
+			<div class="control-group">
+                              <div class="form_row" style="display:none;"><br/>
+				<label for="theme" ><b>Select :&nbsp;&nbsp;&nbsp;&nbsp;</b> </label>
+    					<% [ 'tables', 'fields'].each do |theme| %>
+     					 <%= radio_button_tag 'theme', theme, @theme == theme %>
+                                              <%= theme.humanize %>
+    				<% end %>
+				</div> 
+				
+		  	 </div>
+	</div>
+
+
+                  <fieldset>
+                       <!-- fields goes here -->
+
+			<div style="display:none;" class="desc" id="tables">
+                        <%= f.text_field :tables_table_name_cont, class: "input-medium search-query" %>
+		            <button type="submit" class="btn">
+			            Search Tables
+		            </button></div>
+			<div style="display:none;" class="desc" id="fields">
+                        <%= f.text_field :tables_database_name_cont, class: "input-medium search-query" %>
+		            <button type="submit" class="btn">
+			            Search Fields
+		            </button></div>
+                </fieldset>
+         <% end %>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<script type="text/javascript">
+ function db_change(){
+	var selectVal = $('#db_id :selected').val();
+	if (selectVal !=""){
+	$('.form_row').css("display","block");
+        if($('#theme_tables').is(':checked')) { $("#tables").show(); }
+	if($('#theme_fields').is(':checked')) { $("#fields").show(); }
+}
+else{
+$("div.desc").hide();
+
+$('.form_row').css("display","none");
+
+}
+
+    }
+$(document).ready(function(){ 
+ $('#search_inp').find('input:text').val('');    
+    $("input[name$='theme']").click(function() {
+
+        var test = $(this).val();
+        $("div.desc").hide();
+        $("#"+test).show();
+        
+
+	
+
+    }); 
+    $("input[name='theme']").change(function() {
+            if ($("input[name='theme']:checked").val() == 'tables')
+                $("#q_tables_database_name_cont").val("");
+            else
+                $("#q_tables_table_name_cont").val("");
+        });
+});
+</script>
+

@@ -1,0 +1,10 @@
+<%= render :partial => "menu" %>
+<h1> Apps </h1>
+<% if @apps.blank? %>
+ <div class="well">
+   Currently you don't have any Apps.
+ </div>
+ <% else %>
+<%= render 'result' %>
+<% end %>
+

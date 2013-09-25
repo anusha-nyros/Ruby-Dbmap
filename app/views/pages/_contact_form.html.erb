@@ -1,0 +1,22 @@
+
+<%= simple_form_for :pages,:url => url_for(:action=>'create',:controller=>'pages'), :html => {method: :post, class: 'form-horizontal'} do |f| %>
+  <%= f.error_notification %>
+
+  <fieldset >
+    <legend>Contact Us Form</legend>
+     <br/>
+      <div class="form-inputs">
+    
+      <%= f.input :first_name ,:input_html=>{:name => "first_name"} %>
+      <%= f.input :last_name ,:input_html=>{:name => "last_name"} %>
+   
+      <%= f.input :email,:input_html=>{:name => "email"} %>
+      
+      <%= f.input :message,:input_html=>{:name => "message",:class => 'span7',:style=>"height:100px;"} %>
+    </div>
+  </fieldset>
+  
+ <div class="form-actions">
+  <p><%= f.submit "Send Email" , class: 'btn btn-primary' %></p>
+  </div>
+<% end %>

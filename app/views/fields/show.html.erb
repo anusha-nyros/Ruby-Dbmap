@@ -1,0 +1,40 @@
+<p>
+  <b>Environment:</b>
+  <%= @field.environment %>
+</p>
+
+<p>
+  <b>Table:</b>
+  <%= Table.find(@field.fieldable_id).table_name  %>
+</p>
+<p>
+  <b>Field name:</b>
+  <%= @field.field_name %>
+</p>
+
+<p>
+  <b>Validation edit:</b>
+  <%= @field.validation_edit %>
+</p>
+
+<p>
+  <b>Type:</b>
+  <%= @field.field_type %>
+</p>
+
+<p>
+  <b>Size:</b>
+  <%= @field.field_size %>
+</p>
+
+
+<p>
+  <b>Description:</b>
+  <%= @field.description %>
+</p>
+
+
+
+<%= link_to 'Edit', edit_field_path(@field), class: 'btn' %> 
+<%#= link_to 'Delete', field_path(@field), method: :delete, confirm: "Are you sure?", class: 'btn btn-danger' %>
+<%= link_to 'Back', fields_path , class: 'btn'%>

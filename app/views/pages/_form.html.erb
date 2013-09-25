@@ -1,0 +1,60 @@
+<%= simple_form_for @page,:html => {method: :post, class: 'form-horizontal'} do |f| %>
+  <%= f.error_notification %>
+
+  <fieldset >
+    <legend>Contact Us </legend>
+     <br/>
+      <div class="form-inputs">
+    
+      <%= f.input :first_name %>
+      <%= f.input :last_name  %>
+   
+      <%= f.input :email %>
+      <%= f.input :companyname,:label => "Company Name"  %>
+      <div style="margin-left:100px;margin-bottom:20px;">
+      <%= link_to '#',:subject => 'message',:class =>"sub_link" do %>
+      Message :<%= image_tag('message.png',:width => 60,:height => 40) %>
+      <% end %>
+      <%= link_to '#',:subject => 'support',:class =>"sub_link" do %>
+      Support :<%= image_tag('support.png',:width => 60,:height => 40) %>
+      <% end %>
+      <%= link_to '#',:subject => 'feedback',:class =>"sub_link" do %>
+      Feedback :<%= image_tag('feedback.png',:width => 60,:height => 40) %>
+      <% end %>
+       <input type="hidden" name='subject' id="subject" >
+      </div>
+    
+      
+      <div class="control-group string required" style="display:none" id="msg">
+	      <label class="string required control-label" for="page_message_typ">
+	      	<strong>Message Type</strong>
+	      </label>
+	      <div class="controls">
+	      	<input class="string required"  id="msgtype" name='subject' size="30" type="text" disabled="disabled">
+	      </div>
+      </div>
+      <%= f.input :message,:input_html=>{:class => 'span7',:style=>"height:100px;"} %>
+    </div>
+  </fieldset>
+  
+ <div class="form-actions">
+  <p><%= f.submit "Send Email" , class: 'btn btn-primary' %></p>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+	$('document').ready(function(){
+		$('.sub_link').click(function(){
+			$('#msg').slideDown('slow');
+			$('#msgtype').val($(this).attr('subject'));
+			$('#subject').val($(this).attr('subject'));
+			
+		});	
+	
+	});
+</script>
+<style>
+#msgtype{
+	width:64px;
+}
+</style>

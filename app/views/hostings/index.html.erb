@@ -1,0 +1,11 @@
+<%= render :partial => "menu" %>
+<%= render :partial => "hostings/search_form", locals: {q: @q} %>
+<div class="categories">
+  <% if @hostings.blank? %>
+    <div class="well">Currently you don't have any instance records.</div>
+  <% else %>
+    <h1>Instances</h1>
+   <%= render :partial => "result" %>
+  <% end %> 
+</div>
+

@@ -1,0 +1,12 @@
+<div class="well" >
+<p> 
+<b> Environment: </b> <%= @environment.db_environment %>
+</p>
+<p> 
+<b> Name: </b> <%= @environment.db_environment_name %>
+</p>
+</div>
+
+
+<%= link_to 'Edit', edit_environment_path(@environment), class: 'btn  btn-medium' %> 
+<%= link_to 'Back', environments_path , class: 'btn  btn-primary btn-medium'%>

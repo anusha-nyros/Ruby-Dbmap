@@ -1,0 +1,22 @@
+<%= render :partial => 'menu' %>
+
+<p>
+  <b>App name:</b>
+  <%= @app.name %>
+</p>
+
+<p>
+  <b>Technology:</b>
+  <%= @app.technology %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= simple_format(@app.app_desc) %>
+</p>
+
+<br/>
+
+<%= link_to 'Edit', edit_app_path(@app) , class: 'btn btn-mini' %> 
+<%= link_to 'Delete', @app ,confirm: "Are you sure?", method: :delete  ,class: 'btn btn-mini btn-danger'%>
+<%= link_to 'Back', apps_path , class: 'btn btn-mini' %>

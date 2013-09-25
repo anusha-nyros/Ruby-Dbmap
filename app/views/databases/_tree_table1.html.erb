@@ -1,0 +1,22 @@
+<table>
+<tr class="<%= @conn_str.id %>">
+	<td style="" class="<%= @conn_str.id %>"> 
+       <ul id="browser" class="filetree treeview-famfamfam " >
+	<li> <span class="folder"><%= @conn_str.db_name %></span>
+	<ul>
+	<% @tables.each do |d| %>
+ 		<li > <span class="folder"><%= d.table_name %></span>
+                 		<ul>
+			<% d.fields.sort_by{ |i| i[:field_name]}.each do |f| %>
+			<li><span class="file"><%=f.field_name %></span></li>
+			<% end %>
+			</ul>
+                </li>
+       <% end %>
+       </ul>
+        </li>
+
+       </ul>
+</td>
+</tr>
+</table>

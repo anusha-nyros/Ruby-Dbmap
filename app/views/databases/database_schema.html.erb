@@ -1,0 +1,231 @@
+<h2><%= @database.db_name %> Schema </h2>
+<% ty_active_tables = @database.tables.where("ofrows >= 1").length %>
+<span class="pull-right" style="margin-top:-30px;margin-right:200px;"><input type="radio" name="theme1" id="<%= @database.id %>" value="alpha_view" class="alpha" checked />Alpha &nbsp;
+    		<input type="radio" name="theme1" id="<%= @database.id %>" value="type_view"/>Type&nbsp; 
+<input type="radio" name="theme1" id="<%= @database.id %>" value="mod_view"/>Module/Feature&nbsp;
+<input type="checkbox" value="show_active1" name="theme_active1" id="<%= @database.id %>"  >&nbsp;Active Only</input>&nbsp;
+</span>
+<h2><span class="pull-right" style="margin-top:-40px;"> <%= link_to "Back","/databases" ,class: 'btn btn-primary' %></span></h2> 
+<!-- Aplha View -->
+<div class="container alpha_view" style ="border: solid 1px;padding:13px;display:block;" >
+<h3 class="ty_act" style="display:block;"> There are <%=@database.tables.length %> table(s) in this database </h3>
+<h3 class="ty_act1" style="display:none;"> There are <%=ty_active_tables %> active table(s) in this database </h3>
+<hr/>
+<% @database.tables.each do |table|%>
+<div class="alpha_in_active_tables" style="display:block;" >
+<table class = "table table-bordered">
+  <tr style ="margin-bottom:3px"><b style= "font-size:20px"> Table: <%= table.table_name %> </b> <span style="float:right;padding-right :8px"><b> Total Records:</b><%= [table.ofrows] %></span></tr>
+  <tr>
+    <th>Field Name</th>
+    <th>Type</th>
+    <th>Size</th>
+    <th>Field Description</th>
+  </tr>
+  <% table.fields.each do |field| %>
+  <tr>
+    <td><%= field.field_name %></td>
+    <td><%= field.field_type %></td>
+    <td><%= field.field_size %></td>
+    <td><%#= field.short_description %></td>
+  </tr>
+  <%end%>
+
+  </table>
+<p><b>Table Description:</b></p>
+		  <div style="word-wrap: break-word;padding-left: 8px;width: 850px"><%=table.description %></div>
+
+</div>
+				<% alpha_active_tables = table.records%>
+ 		                 <% if !alpha_active_tables.blank? %>
+<div class="alpha_active_tables" style="display:none;" >
+<table class = "table table-bordered">
+  <tr style ="margin-bottom:3px"><b style= "font-size:20px"> Table: <%= table.table_name %> </b> <span style="float:right;padding-right :8px"><b> Total Records:</b><%= [table.ofrows] %></span></tr>
+  <tr>
+    <th>Field Name</th>
+    <th>Type</th>
+    <th>Size</th>
+    <th>Field Description</th>
+  </tr>
+  <% table.fields.each do |field| %>
+  <tr>
+    <td><%= field.field_name %></td>
+    <td><%= field.field_type %></td>
+    <td><%= field.field_size %></td>
+    <td><%#= field.short_description %></td>
+  </tr>
+  <%end%>
+
+  </table>
+<p><b>Table Description:</b></p>
+		  <div style="wrap:word;padding-left: 8px;width: 850px"><%=table.description %></div>
+</div>
+<% else %>
+
+<% end %>
+		  
+  <br/>
+<% end %>
+
+</div>
+<!-- -->
+<!-- Mod  View -->
+<div class="container mod_view" style ="border: solid 1px;padding:13px;display:none;">
+<h3 class="ty_act" style="display:block;"> There are <%=@database.tables.length %> table(s) in this database </h3>
+<h3 class="ty_act1" style="display:none;"> There are <%=ty_active_tables %> active table(s) in this database </h3>
+<hr/>
+<% @database.tables.order("feature_types desc").each do |table|%>
+<div class="mod_view_in_active_tables" style="display:block;" >
+<table class = "table table-bordered">
+  <tr style ="margin-bottom:3px"><b style= "font-size:20px"> Table: <%= table.table_name %> </b> <span style="float:right;padding-right :8px"><b> Total Records:</b><%= [table.ofrows] %></span></tr>
+  <tr>
+    <th>Field Name</th>
+    <th>Type</th>
+    <th>Size</th>
+    <th>Field Description</th>
+  </tr>
+  <% table.fields.each do |field| %>
+  <tr>
+    <td><%= field.field_name %></td>
+    <td><%= field.field_type %></td>
+    <td><%= field.field_size %></td>
+    <td><%#= field.short_description %></td>
+  </tr>
+  <%end%>
+
+  </table>
+		  <p><b>Table Description:</b></p>
+		  <div style="wrap:word;padding-left: 8px;width: 850px"><%=table.description %></div>
+  <br/>
+</div>
+<!----------------------------------------------->
+<% mod_view_active_tables = table.records%>
+ 		                 <% if !mod_view_active_tables.blank? %>
+<div class="mod_view_active_tables" style="display:none;" >
+<table class = "table table-bordered">
+  <tr style ="margin-bottom:3px"><b style= "font-size:20px"> Table: <%= table.table_name %> </b> <span style="float:right;padding-right :8px"><b> Total Records:</b><%= [table.ofrows] %></span></tr>
+  <tr>
+    <th>Field Name</th>
+    <th>Type</th>
+    <th>Size</th>
+    <th>Field Description</th>
+  </tr>
+  <% table.fields.each do |field| %>
+  <tr>
+    <td><%= field.field_name %></td>
+    <td><%= field.field_type %></td>
+    <td><%= field.field_size %></td>
+    <td><%#= field.short_description %></td>
+  </tr>
+  <%end%>
+
+  </table>
+		  <p><b>Table Description:</b></p>
+		  <div style="wrap:word;padding-left: 8px;width: 850px"><%=table.description %></div>
+  <br/>
+</div>
+<% else %>
+
+<% end %>
+<!------------------------------------------------->
+<% end %>
+</div>
+
+
+
+
+
+
+<!-- Type View -->
+<div class="container type_view" style ="border: solid 1px;padding:13px;display:none;"> <!--main div -->
+<h3 class="ty_act" style="display:block;"> There are <%=@database.tables.length %> table(s) in this database </h3>
+<h3 class="ty_act1" style="display:none;"> There are <%=ty_active_tables %> active table(s) in this database </h3>
+<hr/>
+<div class="type_view_in_active_tables" style="display:block;" >
+<% ["Maintenance","Recap","Setup","Transactional","View",""].each do |ty| %>
+<% if ty !="" %> <h4 style= "font-size:20px"> <%= ty %> Tables: </h4><br/>
+<% else %> <h4 style= "font-size:20px"> Not Defined Tables: </h4><br/> <% end %>
+<% if ty == "" %>
+<% ty_tables = @database.tables.where("table_type is ?",nil) %>
+<% else %>
+<% ty_tables = @database.tables.where(:table_type=> ty) %>
+<% end %>
+<% if !ty_tables.blank? %>
+<% ty_tables.each do |table|%>
+
+<table class = "table table-bordered">
+  <tr style ="margin-bottom:3px"><b style= "font-size:20px"> Table: <%= table.table_name %> </b> <span style="float:right;padding-right :8px"><b> Total Records:</b><%= [table.ofrows] %></span></tr>
+  <tr>
+    <th>Field Name</th>
+    <th>Type</th>
+    <th>Size</th>
+    <th>Field Description</th>
+  </tr>
+  <% table.fields.each do |field| %>
+  <tr>
+    <td><%= field.field_name %></td>
+    <td><%= field.field_type %></td>
+    <td><%= field.field_size %></td>
+    <td><%#= field.short_description %></td>
+  </tr>
+  <%end%>
+
+  </table>
+		  <p><b>Table Description:</b></p>
+		  <div style="wrap:word;padding-left: 8px;width: 850px"><%=table.description %></div>
+  <br/>
+<% end %>
+<% else %>
+<br/><p> No Tables to display </p><br/>
+<% end %>
+<% end %>
+</div>
+<!----------------------------------------------->
+<div class="type_view_active_tables" style="display:none;" >
+<% ["Maintenance","Recap","Setup","Transactional","View",""].each do |ty| %>
+<% if ty !="" %> <h4 style= "font-size:20px"> <%= ty %> Tables: </h4><br/>
+<% else %> <h4 style= "font-size:20px"> Not Defined Tables: </h4><br/> <% end %>
+<% if ty == "" %>
+<% ty_tables = @database.tables.where("table_type is ?",nil) %>
+<% else %>
+<% ty_tables = @database.tables.where(:table_type=> ty) %>
+<% end %>
+<% if !ty_tables.blank? %>
+<% ty_tables.each do |table|%>
+<% type_view_active_tables = table.records%>
+ 		                 <% if !type_view_active_tables.blank? %>
+
+<table class = "table table-bordered">
+  <tr style ="margin-bottom:3px"><b style= "font-size:20px"> Table: <%= table.table_name %> </b> <span style="float:right;padding-right :8px"><b> Total Records:</b><%= [table.ofrows] %></span></tr>
+  <tr>
+    <th>Field Name</th>
+    <th>Type</th>
+    <th>Size</th>
+    <th>Field Description</th>
+  </tr>
+  <% table.fields.each do |field| %>
+  <tr>
+    <td><%= field.field_name %></td>
+    <td><%= field.field_type %></td>
+    <td><%= field.field_size %></td>
+    <td><%#= field.short_description %></td>
+  </tr>
+  <%end%>
+
+  </table>
+		  <p><b>Table Description:</b></p>
+		  <div style="wrap:word;padding-left: 8px;width: 850px"><%=table.description %></div>
+  <br/>
+<% end %>
+<% end %>
+<% else %>
+<br/><p> No Tables to display </p><br/>
+<% end %>
+
+<% end %>
+</div>
+<!----------------------------------------------->
+
+
+
+</div> <!--main div -->
+<!-- Type View -->

@@ -1,0 +1,34 @@
+<%= render :partial => "menu" %>
+<div class="well" >
+<p> 
+<b> Environment ID: </b> <%= @hosting.env_id %>
+</p>
+<p> 
+<b> Instance ID: </b> <%= @hosting.inst_id %>
+</p>
+<p> 
+<b> Environment: </b> <%= @hosting.db_hosting %>
+</p>
+<p> 
+<b> Name: </b> <%= @hosting.db_hosting_name %>
+</p>
+<p> 
+<b> Description: </b> <%= simple_format(@hosting.description) %>
+</p>
+<p> 
+<b> OS: </b> <%= @hosting.os %>
+</p>
+<p> 
+<b> Apps: </b> <%= simple_format(@hosting.apps) %>
+</p>
+<p> 
+<b> IP: </b> <%= @hosting.ip %>
+</p>
+<p> 
+<b> Notes: </b> <%= simple_format(@hosting.notes) %>
+</p>
+</div>
+
+
+<%= link_to 'Edit', edit_hosting_path(@hosting), class: 'btn  btn-medium' %>
+<%= link_to 'Back', hostings_path , class: 'btn  btn-primary btn-medium'%>

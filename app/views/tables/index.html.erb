@@ -1,0 +1,64 @@
+   
+<%#= render :partial => "menu" %>
+<!--Search block-->
+<% if !@tables.nil? %>
+<%= render :partial => "tables/search_form", locals: {q: @q} %>
+<% end %> <!--Search block-->
+<% if @tables.blank? %>
+  <div class="well">You don't currently have any tables </div>
+<% else %>
+<h1>Tables</h1>
+<!--Displaying table values from db-->
+<table class="table table-striped" >
+	<tr>
+
+    <th><%=sort_link(@q,:database_name,"Database" )%></th>
+    <th></th>
+     <th><%= sort_link(@q, :table_name, "Table Name") %></th>
+    <th><%= sort_link(@q, :ofrows, "Of Rows") %></th>
+      <th><%= sort_link(@q, :ofcolumns, "Of Columns") %></th>
+    <th><%= sort_link(@q, :updated_at, "Last Used") %></th>
+		 <th><%= sort_link(@q, :environment, "Environment") %></th>
+  <th><%= sort_link(@q, :description, "Description") %></th>
+    <th></th>
+  </tr>
+  <%# @databases.each do |database| %>
+<% @tables.each do |table| %>
+  <tr>
+
+    <td ><%= table.database_name %></td>
+<td>  <%= link_to image_tag("exp.png", :border => 0), '#',:title =>"Expand Table fields",:class => "expand " ,:id => "#{table.id }" %>
+  <%= link_to image_tag("colp.png", :border => 0) , '#',:class => "collapse",:style =>"display:none;" ,:id => "#{table.id }"%></td>
+    
+            <td><%= table.table_name %></td>
+    <td><%= table.ofrows %></td>
+    <td><%= table.ofcolumns %></td>
+    <td><%= table.updated_at.strftime("%b-%d-%Y") if !table.updated_at.blank? %></td>
+    <td><%= table.environment %></td>
+    <td><%= table.short_description %></td>
+   <td style="width:140px;">
+ 
+   <%#= link_to 'Table Link', table, class: 'btn btn-mini' %>
+   <%= link_to 'Edit', edit_table_path(table), class: 'btn btn-mini' %>
+
+ </td>
+  </tr>
+
+<tr  class="<%= table.id %>">
+<td class="<%= table.id %>" colspan="2" style="display:none;"></td>
+<td  class="<%= table.id %>" colspan="8" style="display:none;"><b> Fields: </b></td>
+
+</tr>
+<% table.fields.each do |f| %>
+<tr class="<%= table.id %>" >
+<td class="<%= table.id %>" colspan="2" style="display:none;background-color:white;"></td>
+<td  colspan="8"  class="<%= table.id %>" style="display:none;background-color:white;"> <%= f.field_name %></td>
+</tr>
+<% end %>
+<% end %>
+<% #end %>
+
+</table>
+<%= paginate @tables  %>
+<% end %>
+

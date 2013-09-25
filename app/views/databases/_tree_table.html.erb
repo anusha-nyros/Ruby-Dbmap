@@ -1,0 +1,57 @@
+
+<ul id="browser1" class="filetree treeview-famfamfam ">
+<li> <span class="folder" style="color:#333333;"><%= @conn_str.db_name %>
+	 <ul>
+
+<!-- for  tables -->
+<% ["Maintenance","Recap","Setup","Transactional","View",""].each do |ty| %>
+
+               <li> <span class="folder"><% if ty !="" %><%= ty %> <% else %> <%= "Not Defined" %> <% end %></span>
+	       <% if ty == "" %>
+                <% if @show_active == "show_active" %>
+		  <% ty_tables = @conn_str.tables.where("table_type is ? and ofrows >= 1",nil) %>
+	         <%else%>
+		  <% ty_tables = @conn_str.tables.where("table_type is ?",nil) %>
+	         <%end%> 
+               <% else %>
+		  <% if @show_active == "show_active" %>
+		  <% ty_tables = @conn_str.tables.where("table_type = ? and ofrows >= 1",ty)%>
+	         <%else%>
+			 <% ty_tables = @conn_str.tables.where(:table_type => ty) %>
+                 <%end%> 
+		<% end %>
+                    <ul>
+                            <% if !ty_tables.blank? %>
+	                       <% ty_tables.each do |d| %>
+				<% active_tables = d.records%>
+				 <% if !active_tables.blank? %>
+ 		                 <li class="active_tables<%= @conn_str.id %>"> <span class="folder"><%= d.table_name %> <span class="tab_cnt<%=@conn_str.id%>" style="display:none;color:black;"> - #Fields:<b><%= d.fields.length %></b> </span></span>
+<span class="desc_tables<%= @conn_str.id %>" style="display:none;"><% if !d.description.blank? %> <b>Description:</b> <%= d.description %> <% end %></span>
+				 <% else %>
+				 <li class="in_active_tables<%= @conn_str.id %>"> <span class="folder"><%= d.table_name %> <span class="tab_cnt<%=@conn_str.id%>" style="display:none;color:red;"> - #Fields:<b><%= d.fields.length %></b> </span></span>
+<span class="desc_tables<%= @conn_str.id %>" style="display:none;"><% if !d.description.blank? %> <b>Description:</b> <%= d.description %> <% end %></span>
+				 <% end %>
+                     			<ul>
+						<% d.fields.sort_by{ |i| i[:field_name]}.each do |f| %>
+						<li><span class="file"><%=f.field_name %></span></li>
+						<% end %>
+					</ul>
+                                </li>
+                              <% end %>
+		          <% else %>
+				<li><span class="file">No Tables</span></li>
+			  <% end %>
+
+                  </ul>
+              </li>
+<% end %>
+<!-- end for  -->
+<!-- Add removed data from here -->
+          </ul>
+
+              </li>
+
+        </li>
+
+ </ul>
+</div>

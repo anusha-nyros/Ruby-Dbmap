@@ -1,0 +1,341 @@
+<style>
+	.fancybox-skin{
+		padding: 15px;
+width: 390px !important;
+height: 250px !important;
+	}
+	.fancybox-inner{
+	width:auto !important;
+	}
+</style>
+<script>
+ $(document).ready(function (){
+	$('.syncing').click(function(e){ 
+          var sync_confirmation =confirm("Do you want to synchronize the database ? ");
+		if(sync_confirmation == true)
+                {
+      	 		$('.matter').html("Sync In Progress ...")
+			$('.pbar').css("display","block");
+		return true;
+                }
+		else{
+		return false;
+		   }
+ });
+$('.preparing').click(function(e){ 
+
+	 var thid = $(this).attr('id');
+      //  if($('#project_check').val() != ''){
+                 // var project_bulk_ids = $('#project_check').val();
+                   
+	 	var confirmation = true;
+		if(confirmation == true)
+		{
+			             $(this).fancybox();  
+			              	$.ajax({
+                          type: "POST",
+                          url: "/options",
+                          traditional: true,
+                          data: {
+                              ids: thid
+                                  },
+                          success:function(data, textStatus, XMLHttpRequest){
+                                $.fancybox({
+                                              'content' : data,
+                                              'overlayShow'	: true,
+				              'transitionIn'	: 'elastic',
+				              'transitionOut'	: 'elastic',
+					      'autoDimensions' : false,
+			                      'width'       	: 800,
+                                              });    
+                                                           
+                               }  
+				                    });  
+      	          
+                	return false;
+                }
+		else{
+		return false;
+		   }
+	   });
+	   
+	   $('.clo').click(function(e){
+
+	    $('.fancybox-close').trigger('click');      
+ });
+        
+ });
+</script>
+
+
+<style>
+ table { table-layout: fixed; }
+ table th, table td { }
+</style>
+
+
+<table class="table table-striped">  
+  <tr>
+    <th style="width:12px;"> </th>
+    <th style="width:22%"><%= sort_link(@q, :db_name, "Database Name") %></th>
+    <th style="width:12%"><%= sort_link(@q, :db_environment, "Environment") %></th>
+    <th style="width:11%"><%= sort_link(@q, :db_technology, "Technology") %></th>
+    <th  style="width:20%"><%= sort_link(@q, :db_usage, "Usage") %></th>
+    <th  style="width:8%"><%= sort_link(@q, :oftables, "#Tables") %></th>
+    <th  style="width:8%"><%= sort_link(@q, :offields, "#Fields") %></th>
+    <th  style="width:10%"><%= sort_link(@q, :last_sync, "Last Sync") %></th>
+
+    <th style="width:29%"></th>
+    
+  </tr>
+
+<% @databases.each do |database| %>
+  <tr>
+
+    <td >
+
+   <%= link_to image_tag("exp.png", :border => 0), '#',:title =>"Expand Table fields",:class => "dbexpand " ,:id => "#{database.id }" %>
+  <%= link_to image_tag("colp.png", :border => 0) , '#',:class => "dbcollapse",:style =>"display:none;" ,:id => "#{database.id }"%>
+   </td>
+	  <td style="width:15px"> <%= link_to database.db_name,search_tables_path(:q =>{"database_name_cont" =>"#{database.db_name}"}) %> </td>
+    <td> <%= database.db_environment %> </td>
+    <td> <%= database.db_technology %> </td>
+    <td> <%= database.db_usage %> </td>
+    <td> <%= number_with_delimiter(database.oftables) %> </td>
+    <td> <%= number_with_delimiter(database.offields) %> </td>
+    <td> <%= database.last_sync.strftime("%b-%d-%Y") if !database.last_sync.blank? %> </td>
+
+    <td >
+ 
+  <%= link_to 'Sync', database_schema1_path(:id => database.id) ,class: 'btn btn-mini  syncing' %>
+     <%= link_to 'Details', database,class: 'btn btn-mini' %>
+     <%= link_to 'Schema', database_schema_path(:id => database.id) ,class: 'btn btn-mini' if database.db_technology == "MySQL" %>
+     <%= link_to 'Data View',  dataview_databases_path(:id => database.id) ,class: 'btn btn-mini',:style=>"margin-top:10px;"%>
+    <%= simple_form_for :database,:url => url_for(:action=>'pdf_report',:controller=>'databases'), :html => {class: 'form-horizontal preparing'}  do |f| %>
+        <input type="hidden" name="data_id" value=" <%= database.id %>"/>
+	<%= submit_tag("Analysis", :class=> "btn btn-mini preparing",:id =>"#{database.id}",:style=>"float:right;margin-top:-20px;margin-right:70px;") %>
+
+
+	<% end %>
+
+    </td>
+
+  </tr>
+
+<tr class="<%= database.id %>" >
+	<% maintenance_tables = database.tables.where(:table_type=>"Maintenance") %>
+	<% recap_tables = database.tables.where(:table_type=>"Recap") %>
+	<% setup_tables = database.tables.where(:table_type=>"Setup") %>
+	<% trans_tables = database.tables.where(:table_type=>"Transactional") %>
+	<% view_tables = database.tables.where(:table_type=>"View") %>
+	<% notdefined_tables = database.tables.where("table_type is ?",nil) %>
+       <% ty_active_tables = database.tables.where("ofrows >= 1").length %> 
+<td style="display:none;background-color:white;" class="<%= database.id %>" colspan="4"> 
+<div id="alpha_tree<%= database.id %>" style="display:block;">
+       <ul id="browser<%=database.id%>" class="filetree treeview-famfamfam " >
+	<li> <span class="folder" style="color:#000080;"><%= database.db_name %>  
+<span class="tab_cnt_active<%=database.id%>" style="display:none;color:#333333;"> - #Tables:<b><%= ty_active_tables %></b> </span>
+<span class="tab_cnt1<%=database.id%>" style="display:none;color:#333333;"> - #Tables:<b><%= database.tables.length %></b> </span>
+   </span>
+       
+	<ul>
+	<% database.tables.each do |d| %>
+				<% alpha_active_tables = d.records%>
+ 		                 <% if !alpha_active_tables.blank? %>
+ 		                 <li class="active_tables<%= database.id %>"> <span class="folder"><%= d.table_name %> <span class="tab_cnt<%=database.id%>" style="display:none;color:#333333;"> - #Fields:<b><%= d.fields.length %></b> </span></span>
+				 
+				 <span class="desc_tables<%= database.id %>" style="display:none;"><% if !d.description.blank? %><b> Description: </b><%= d.description %> <% end %></span>
+				 <% else %>
+				 <li class="in_active_tables<%= database.id %>"> <span class="folder"><%= d.table_name %> <span class="tab_cnt<%=database.id%>" style="display:none;color:#333333;"> - #Fields:<b><%= d.fields.length %></b> </span></span>
+				<span class="desc_tables<%= database.id %>" style="display:none;"><% if !d.description.blank? %> <b>Description:</b> <%= d.description %> <% end %></span>
+				 <% end %>
+                     			<ul>
+						<% d.fields.sort_by{ |i| i[:field_name]}.each do |f| %>
+						<li><span class="file"><%=f.field_name %></span></li>
+						<% end %>
+					</ul>
+                </li>
+       <% end %>
+       </ul>
+        </li>
+
+       </ul>
+</div>
+<div id="mod_feature_tree<%= database.id %>" style="display:none;">
+       <ul id="browser2<%=database.id%>" class="filetree treeview-famfamfam " >
+	<li> <span class="folder" style="color:#000080;"><%= database.db_name %> 
+<span class="tab_cnt_active<%=database.id%>" style="display:none;color:#333333;"> - #Tables:<b><%= ty_active_tables %></b> </span>
+<span class="tab_cnt1<%=database.id%>" style="display:none;color:#333333;"> - #Tables:<b><%= database.tables.length %></b> </span>
+   </span>
+	<ul>
+	<% database.tables.order("feature_types desc").each do |d| %>
+				<% alpha_active_tables = d.records%>
+ 		                 <% if !alpha_active_tables.blank? %>
+ 		                 <li class="active_tables<%= database.id %>"> <span class="folder"><%= d.table_name %> <span class="tab_cnt<%=database.id%>" style="display:none;color:#333333;"> - #Fields:<b><%= d.fields.length %></b> </span></span>
+				 <span class="desc_tables<%= database.id %>" style="display:none;"><% if !d.description.blank? %> <b>Description:</b> <%= d.description %> <% end %></span>
+				 <% else %>
+				 <li class="in_active_tables<%= database.id %>"> <span class="folder"><%= d.table_name %> <span class="tab_cnt<%=database.id%>" style="display:none;color:#333333;"> - #Fields:<b><%= d.fields.length %></b> </span></span>
+				<span class="desc_tables<%= database.id %>" style="display:none;"><% if !d.description.blank? %><b> Description: </b><%= d.description %> <% end %></span>
+				 <% end %>
+                     			<ul>
+						<% d.fields.sort_by{ |i| i[:field_name]}.each do |f| %>
+						<li><span class="file"><%=f.field_name %></span></li>
+						<% end %>
+					</ul>
+                </li>
+       <% end %>
+       </ul>
+        </li>
+
+       </ul>
+</div>
+<div id="type_tree<%=database.id%>" style="display:none;">
+<ul id="browser1<%=database.id%>" class="filetree treeview-famfamfam ">
+	<li> <span class="folder" style="color:#000080;"><%= database.db_name %> 
+<span class="tab_cnt_active<%=database.id%>" style="display:none;color:#333333;"> - #Tables:<b><%= ty_active_tables %></b> </span>
+<span class="tab_cnt1<%=database.id%>" style="display:none;color:#333333;"> - #Tables:<b><%= database.tables.length %></b> </span>
+   </span>
+
+	 <ul>
+<!-- for  tables -->
+<% ["Maintenance","Recap","Setup","Transactional","View",""].each do |ty| %>
+
+               <li> <span class="folder"><% if ty !="" %><%= ty %> <% else %> <%= "Not Defined" %> <% end %></span>
+          	<% if ty == "" %>
+			<% ty_tables = database.tables.where("table_type is ?",nil) %>
+		<% else %>
+			<% ty_tables = database.tables.where(:table_type=> ty) %>
+		<% end %>
+                    <ul>
+                            <% if !ty_tables.blank? %>
+	                       <% ty_tables.each do |d| %>
+				<% active_tables = d.records%>
+				 <% if !active_tables.blank? %>
+ 		                 <li class="active_tables<%= database.id %>"> <span class="folder"><%= d.table_name %> <span class="tab_cnt<%=database.id%>" style="display:none;color:#333333;"> - #Fields:<b><%= d.fields.length %></b> </span></span>
+<span class="desc_tables<%= database.id %>" style="display:none;"><% if !d.description.blank? %> <b>Description:</b> <%= d.description %> <% end %></span>
+				 <% else %>
+				 <li class="in_active_tables<%= database.id %>"> <span class="folder"><%= d.table_name %> <span class="tab_cnt<%=database.id%>" style="display:none;color:#333333;"> - #Fields:<b><%= d.fields.length %></b> </span></span>
+<span class="desc_tables<%= database.id %>" style="display:none;"><% if !d.description.blank? %> <b>Description:</b> <%= d.description %> <% end %></span>
+				 <% end %>
+                     			<ul>
+						<% d.fields.sort_by{ |i| i[:field_name]}.each do |f| %>
+						<li><span class="file"><%=f.field_name %></span></li>
+						<% end %>
+					</ul>
+                                </li>
+                              <% end %>
+		          <% else %>
+				<li><span class="file">No Tables</span></li>
+			  <% end %>
+
+                  </ul>
+              </li>
+<% end %>
+<!-- end for  -->
+<!-- Add removed data from here -->
+          </ul>
+
+              </li>
+
+        </li>
+
+ </ul>
+</div>
+
+</td>
+ <td style="display:none;background-color:white;" class="<%= database.id %>" colspan="3" >
+                   <label for="theme" > </label>
+    		<input type="radio" name="theme" id="<%= database.id %>" value="alpha_tree" class="alpha" checked />Alpha &nbsp;
+    		<input type="radio" name="theme" id="<%= database.id %>" value="type_tree"/>Type&nbsp;
+    		<input type="radio" name="theme" id="<%= database.id %>" value="mod_feature_tree"/>Module/Feature
+
+                </td>
+   <td style="display:none;background-color:white;" class="<%= database.id %>" colspan="2">
+
+     <input type="checkbox" value="show_active" name="theme_active" id="<%= database.id %>"  >&nbsp;Active Only</input>&nbsp;
+     <input type="checkbox" value="show_desc" name="theme_desc" id="<%= database.id %>" >&nbsp;Short Description</input><br/><br/>
+     <input type="checkbox" value="show_count" name="theme_count" id="<%= database.id %>" >&nbsp;Show Counts</input>
+  </td>
+
+</tr>
+
+
+<% end %>
+</table>
+<br />
+<style>
+.treeview, .treeview ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.treeview ul {
+	background-color: white;
+	margin-top: 4px;
+}
+
+.treeview .hitarea {
+	background: url(/assets/tree/treeview-default.gif) -64px -25px no-repeat;
+	height: 16px;
+	width: 16px;
+	margin-left: -16px;
+	float: left;
+	cursor: pointer;
+}
+/* fix for IE6 */
+* html .hitarea {
+	display: inline;
+	float:none;
+}
+
+.treeview li {
+	margin: 0;
+	padding: 3px 0pt 3px 16px;
+}
+
+.treeview a.selected {
+	background-color: #eee;
+}
+
+#treecontrol { margin: 1em 0; display: none; }
+
+.treeview .hover { color: red; cursor: pointer; }
+
+.treeview li { background: url(/assets/tree/treeview-default-line.gif) 0 0 no-repeat; }
+.treeview li.collapsable, .treeview li.expandable { background-position: 0 -176px; }
+
+.treeview .expandable-hitarea { background-position: -80px -3px; }
+
+.treeview li.last { background-position: 0 -1766px }
+.treeview li.lastCollapsable, .treeview li.lastExpandable { background-image: url(/assets/tree/treeview-default.gif); }
+.treeview li.lastCollapsable { background-position: 0 -111px }
+.treeview li.lastExpandable { background-position: -32px -67px }
+
+.treeview div.lastCollapsable-hitarea, .treeview div.lastExpandable-hitarea { background-position: 0; }
+
+.treeview-red li { background-image: url(/assets/tree/treeview-red-line.gif); }
+.treeview-red .hitarea, .treeview-red li.lastCollapsable, .treeview-red li.lastExpandable { background-image: url(/assets/tree/treeview-red.gif); }
+
+.treeview-black li { background-image: url(/assets/tree/treeview-black-line.gif); }
+.treeview-black .hitarea, .treeview-black li.lastCollapsable, .treeview-black li.lastExpandable { background-image: url(/assets/tree/treeview-black.gif); }
+
+.treeview-gray li { background-image: url(/assets/tree/treeview-gray-line.gif); }
+.treeview-gray .hitarea, .treeview-gray li.lastCollapsable, .treeview-gray li.lastExpandable { background-image: url(/assets/tree/treeview-gray.gif); }
+
+.treeview-famfamfam li { background-image: url(/assets/tree/treeview-famfamfam-line.gif); }
+.treeview-famfamfam .hitarea, .treeview-famfamfam li.lastCollapsable, .treeview-famfamfam li.lastExpandable { background-image: url(/assets/tree/treeview-famfamfam.gif); }
+
+.treeview .placeholder {
+	background: url(/assets/tree/ajax-loader.gif) 0 0 no-repeat;
+	height: 16px;
+	width: 16px;
+	display: block;
+}
+
+.filetree li { padding: 3px 0 2px 16px; }
+.filetree span.folder, .filetree span.file { padding: 1px 0 1px 16px; display: block; }
+.filetree span.folder { background: url(/assets/tree/folder.gif) 0 0 no-repeat; }
+.filetree li.expandable span.folder { background: url(/assets/tree/folder-closed.gif) 0 0 no-repeat; }
+.filetree span.file { background: url(/assets/tree/file.gif) 0 0 no-repeat; }
+</style>

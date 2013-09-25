@@ -1,0 +1,89 @@
+
+<%= simple_form_for @pattern,:html=>{:id => "myform" } do |f| %>
+  <%= f.error_notification %>
+  
+  <fieldset >    
+    <legend>Pattern Form</legend>
+     <div class="form-inputs">
+          <br/>
+     
+	   <%= f.input :name , input_html: {:class => "span2"} %>
+	
+
+	      <%#= f.input :group %>
+	
+	      <%= f.association :category, collection: current_user.organization.categories, :label => 'Category', :prompt => 'Select any category'  %>
+             <%= f.input :status , as: :select,collection: ['Draft','Publish'],:default => "Draft",:include_blank => false if current_user.admin? %> 
+             <div class="controls1">
+              <div id="main_assets_block"> 
+		<label class="string required control-label" for=""><strong >HTML,CSS,JS</strong></label>
+ 		<%= link_to "Click Here to Add Html/Css/Js", "#", :id => 'assets_block' %> <br/><br/>
+             </div>
+             </div>
+             <div id ="pat_code" style="display:none;">
+               <div id="tabs" style="width:700px;margin-left:160px;">
+  		<ul >
+    		<li><a href="#tabs-1">HTML</a></li>
+    		<li><a href="#tabs-2">CSS</a></li>
+    		<li><a href="#tabs-3">JS</a></li>
+  		</ul>
+  		<div id="tabs-1">
+                  <p> <%= f.input :pat_html, :label => "&nbsp;" ,input_html: {rows: '9',cols: '40', class: 'span8',:style=>"margin-left:-160px;"} %> </p>
+  		</div>
+  		<div id="tabs-2">
+   		 	
+                  <p> <%= f.input :pat_css, :label => "&nbsp;" ,input_html: {rows: '9',cols: '40', class: 'span8',:style=>"margin-left:-160px;"} %> </p>
+  		</div>
+  		<div id="tabs-3">
+    			
+                 <p> <%= f.input :pat_js, :label => "&nbsp;" ,input_html: {rows: '9',cols: '40', class: 'span8',:style=>"margin-left:-160px;"} %> </p>
+    		</div>
+               
+               </div>
+                <br/>
+             </div> 
+             <%#= f.input :asset_attachment, :label => "HTML,CSS,JavaScript" ,as: :file,hint: '(ZIP,RAR)' %>
+             <%= f.input :attachment, :label => "Wireframe Example" ,as: :file,hint: '(JPG,PNG)'  %>
+	      <%= f.input :what_problem,:label => "What problem does this pattern solve ?" ,  input_html: {rows: '6', class: 'span6'} %>
+	      <%= f.input :when_used,:label => "When to use it ?" ,  input_html: {rows: '6', class: 'span6'} %> 
+	      <%= f.input :how_used, :label => "How to use it ?" ,input_html: {rows: '6', class: 'span6'} %>
+	
+      <%# users = @pattern.users.each{|user| user.name = "#{user.name} (#{user.email})"} %>
+      <%#= f.input :user_tokens, label: "Users", input_html: {"data-pre" => users.to_json(only: [:id, :name])} %>
+		       <%#= f.input :use_privacy %>
+      <%#= f.input :color, input_html: {:class => "colorpicker" } %>
+    </div>    
+  </fieldset>
+  <div class="form-actions">
+  <%= f.button :submit, class: 'btn btn-primary' %>
+  </div>
+<% end %>
+
+
+<style>
+#bgcol span {
+	float:left;
+	display:inline;
+	padding-right:3px;
+}
+.ui-widget-header { border: 1px solid whiteSmoke; background: whiteSmoke ; color: #ffffff; font-weight: bold; }
+#main_assets_block a { margin-left:140px;font-size:13px;}
+#main_assets_block label { font-size:13px;margin-right:-117px;margin-top:-3px;}
+#assets_block { font-size:13px;margin-right:-117px;}
+#assets_block  { font-size:13px;font-weight:bold;}
+#main_assets_block label .control-label {margin-right:-117px;}
+
+</style>
+<script>
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+$('document').ready(function(){
+$("#assets_block").click(function () {
+  var $that = $(this);
+  $("#pat_code").toggle("slow", function() {
+    $that.toggleClass("toggled-off");
+  });
+});
+});
+  </script>

@@ -1,0 +1,22 @@
+<%= render :partial => "menu" %>
+<% if !@databases.nil? %>
+<%#= render :partial => "databases/search_form", locals: {q: @q} %>
+<% end %>
+<% if @databases.blank? %>
+  <div class="well">You don't currently have any databases. </div>
+<% else %>
+	<%#= link_to "DataView",dataview_databases_path %>
+	<%= render 'db_result' %>
+<% end %>
+<% if @obj %>
+	<%= form_for(:at,  :controller=> 'databases',:action =>'index', :method => :get, :html => {  :id => "th" } ) do |f| %>
+		<input type="hidden" name="put_data" value=" <%= @obj %>"/>
+	<%end%>
+<script>
+	$(document).ready(function (){
+	$('#th').submit();
+ });
+
+
+</script>
+<%end%>

@@ -1,0 +1,22 @@
+<h1>Crop Image</h1>
+
+<%= image_tag @database.image_name_url(:large), id: "cropbox" %>
+<br/>
+<h4>Preview</h4>
+<div style="width:100px; height:100px; overflow:hidden;">
+  <%= image_tag @database.image_name_url(:large), :id => "preview" %>
+</div>
+<br/><br/>
+<%= simple_form_for @database do |f| %>
+  <% %w[x y w h].each do |attribute| %>
+    <%= f.text_field "crop_#{attribute}" %>
+  <% end %>
+  <div class="actions">
+    <%= f.submit "Crop" ,class: 'btn btn-primary' %>
+  </div>
+<% end %>
+<script>
+
+
+
+</script>

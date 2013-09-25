@@ -1,0 +1,17 @@
+<%= render :partial => "search_form", locals: {q: @q} %>
+<div id="search-result">
+  <% if @databases.blank?  %>
+    <% if params[:q] %>
+	    <p class="well">No records found</p>
+	    <% else %>
+		    <p>Your search does not generate a result</p>
+    <% end %>
+
+  <% else %>
+  <div style="float:right;margin-right:20px;"><% unless @databases.blank? %>[<%= @databases.count %>] Records Found<% end %></div>
+<br/>
+<%= render :partial=> "result" %>
+
+<% end %>
+</div>
+

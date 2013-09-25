@@ -1,0 +1,22 @@
+<%= simple_form_for(@field, :html=>{:multipart => true, class: 'form-horizontal' }) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+ 
+
+   <%= f.input :database_name,:readonly => true %>
+<div class="control-group "><label class="string optional control-label" >Table</label><div class="controls"><input class="string optional readonly"  name="" readonly="readonly" size="50" type="text" value= <%=Field.find(@field.id).fieldable.table_name%>></div></div>
+   <%= f.input :environment %>
+ <%= f.input :short_description,:label => 'Description', input_html: {rows: '2',cols: '2', class: 'span6'} %>
+    <%#= f.input :field_name %>
+    <%= f.input :validation_edit %>
+   <%#= f.input :field_type %>
+   <%#= f.input :field_size %>
+ <%= f.input :description,:label => 'Long Description', input_html: {rows: '5',cols: '3', class: 'span9'} %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+  </div>
+<% end %>
+

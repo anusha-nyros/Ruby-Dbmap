@@ -1,0 +1,65 @@
+<%= render :partial => "menu" %>
+<%= render :partial => "databases/db_search_form", locals: {q: @q} %>
+<div id="search-result">
+  <% if @databases.blank?  %>
+    <% if params[:q] %>
+	    <p class="well">No records found</p>
+	    <% else %>
+		    <p>Your search does not generate a result</p>
+    <% end %>
+
+  <% else %>
+<% if params[:q][:tables_table_name_cont]!="" && params[:q][:tables_database_name_cont] %>
+  <div style="float:right;margin-right:20px;"><% unless @databases.blank? %>[<%= @databases.count %>] Table Records Found<% end %></div>
+<br/>
+
+<table class="table table-striped">
+  <tr>
+    <th >Database Name</th>
+    <th >Table Name</th>
+    <th >#Fields</th>
+    <th >#Records</th>
+  </tr>
+
+<% @databases.each do |database| %>
+  <tr>
+    <td> <%= database.database_name %> </td>
+    <td> <%= database.table_name %> </td>
+    <td> <%= number_with_delimiter(database.ofrows) %> </td>
+    <td> <%= number_with_delimiter(database.ofcolumns) %> </td>
+
+  </tr>
+<% end %>
+</table>
+<% elsif params[:q][:tables_database_name_cont] %>
+  <div style="float:right;margin-right:20px;"><% unless @databases.blank? %>[<%= @databases.count %>] Field Records Found<% end %></div>
+<br/>
+
+<table class="table table-striped">
+  <tr>
+    <th >Database Name</th>
+    <th >Field Name</th>
+    <th >Table Name</th>
+    <th >Field Type</th>
+    <th >Field Size</th>
+  </tr>
+
+<% @databases.each do |database| %>
+  <tr>
+    <td> <%= database.database_name %> </td>
+    <td> <%= database.field_name %> </td>
+    <td> <%= database.table_name %> </td>
+    <td> <%= database.field_type %> </td>
+    <td> <%= database.field_size %> </td>
+
+  </tr>
+<% end %>
+</table>
+<% else %>
+<div class="well"> Your search does not generate a result </div>
+<% end %>
+
+
+<% end %>
+</div>
+

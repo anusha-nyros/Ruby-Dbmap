@@ -1,0 +1,35 @@
+
+<% if !@error %>
+<h1>DataBase Schema</h1>
+<div class='container' style ='border: solid 1px;padding:13px'>
+<h3> There are <%=@h_type.length %> table in this database </h3>
+<hr/>
+<% @h_type.each do |table_name ,fields|%>
+<table class = "table table-bordered">
+  <tr style ="margin-bottom:3px"><b> <%= table_name %> table</b> <span style="float:right;padding-right :8px"><b> Total Records:</b><%=@h_type[table_name].last[:count] %></span></tr>
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Size</th>
+  </tr>
+  <% fields.each do |field| %>
+  <tr>
+    <td><%= field[:name] %></td>
+    <td><%= field[:type] %></td>
+    <td><%= field[:limit] %></td>
+  </tr>
+  <%end%>
+  </table>
+  <br/>
+<% end %>
+
+</div>
+<%else%>
+<div class="well">
+<%= @error %>
+  </div>
+<%end%>
+
+
+
+

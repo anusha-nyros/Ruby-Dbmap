@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Environment:</b>
+  <%= @table.environment %>
+</p>
+
+<p>
+  <b>Database:</b>
+  <%= @table.database_name %>
+  </p>
+  <p>
+  <b>Table Name:</b>
+  <%= @table.table_name %>
+</p>
+
+<p>
+  <b>Table Type:</b>
+  <%= @table.table_type %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @table.description %>
+</p>
+
+<p>
+  <b>Ofrows:</b>
+  <%= @table.ofrows %>
+</p>
+
+<p>
+  <b>Ofcolumns:</b>
+  <%= @table.ofcolumns %>
+</p>
+
+<%= link_to 'Edit', edit_table_path(@table), class: 'btn' %>
+<%#= link_to 'Delete', table_path(@table), method: :delete, confirm: "Are you sure?", class: 'btn btn-danger' %>
+<%= link_to 'Back', tables_path, class: 'btn' %>

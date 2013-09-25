@@ -1,0 +1,54 @@
+<style>
+
+table {
+   table-layout: fixed;
+   word-wrap: break-word;
+}
+td{
+   word-wrap: break-word;
+}
+.wrap_up_data_view {white-space: pre-line;word-wrap: break-word;width: 825px; }
+</style>
+
+<h3> <%= @database.db_name %> - Data View </h3><br/>
+<% @database.tables.each do |t| %>
+<%  tab_columns = t.column_type.to_s if t.column_type %>
+<%  tab_columns = tab_columns.split(",") %>
+<%  rec_values = t.records %>
+<p style="font-size:20px;"> Table: <b> <%= t.table_name %>  </b>  </p> 
+<p> <b> Description:&nbsp </b> 
+<%= t.description%> </p>
+<% h1 = Hash.new %>
+<% i= 1 %>
+<%  if !rec_values.blank? %>
+<% rec_values.each do |t2| %> <%= "Record data" %>
+<%  t3 = t2.record.to_s.gsub(" Tue,","").gsub(" Fri,","").gsub(" Sun,","").gsub(" Mon,","").gsub(" Wed,","").gsub(" Thu,","").gsub(" Sat,","").gsub(", ","*") %> 
+<%  t3 = t3.split("*")  %>
+<%h1.merge!(Hash["#{i}"  => t3[0...tab_columns.size]])%>
+<% i = i+1 %>
+<% end %>
+<% h1.each do |key,value| %>
+	<p> <b>Record#<%= key %></b> </p>
+	<table>
+	<tr>
+		<th></th>
+		<th></th>
+		<th></th>
+	</tr>
+	<% value.each_with_index do|x,j| %>
+	<tr style="margin-bottom:3px">
+	  <td> <%= "#{tab_columns[j]}" %> <td> 
+	  <td style="width:25px;" > : </td> 
+	  <td> <div class="wrap_up_data_view"> <%= "#{x} " %> </div> </td> 
+	</tr>
+	<tr style="height:12px"> </tr>
+		<% end%>
+	</table>
+	<hr/>
+<%end%>
+<%else%>
+<p>No sample records to display</p>
+<% end %>
+<p style="border-bottom:solid 2px black ; margin-bottom: 18px;
+margin-top: 18px;"></p>
+<% end %>

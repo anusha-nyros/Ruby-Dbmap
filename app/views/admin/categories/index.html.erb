@@ -1,0 +1,31 @@
+<div class="categories">
+  <p><%= link_to "Add Category", new_admin_category_path, class: 'btn btn-primary btn-medium' %></p>
+
+  <% if @categories.blank? %>
+    <div class="well">Currently you don't have any categories.</div>
+  <% else %>
+    <h1>Categories</h1>
+
+    <div class="span5">
+    <table class="table table-striped" id="category-list">
+      <thead>
+      <tr>
+        <th class="span3">Name</th>
+        <th class="span3"></th>
+      </tr>
+      </thead>
+      <tbody data-url="<%= sort_admin_categories_url %>">
+     <% @categories.each do |category| %>
+      <%= content_tag_for :tr, category do %>
+        <td><i class="icon-move"></i> <%= category.name %></td>
+        <td>
+          <%= link_to 'Edit', edit_admin_category_path(category), class: 'btn btn-mini' %>
+        </td>
+      <% end %>
+    <% end %>
+    </tbody>
+    </table></div>
+
+  <% end %> 
+</div>
+

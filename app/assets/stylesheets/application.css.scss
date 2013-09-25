@@ -1,0 +1,65 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require fancybox
+ *= require_tree .
+*/
+
+@import "bootstrap";
+
+.container h1 {
+  margin-bottom: 20px;
+}
+
+
+.foldertab .span1
+{
+width:80px;
+}
+
+.form-inputs label {
+  font-size: 15px;
+
+}
+.controls input, textarea, select, .uneditable-input
+{
+ font-size: 15px;
+}
+.img-logo{
+  margin:10px 0;
+}
+.navbar-inner{
+	background: #f68a28; /* Old browsers */
+
+    background: -moz-linear-gradient(top,  #f68a28 0%, #f36c00 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f68a28), color-stop(100%,#f36c00)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #f68a28 0%,#f36c00 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #f68a28 0%,#f36c00 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #f68a28 0%,#f36c00 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #f68a28 0%,#f36c00 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f68a28', endColorstr='#f36c00',GradientType=0 ); /* IE6-9 */
+
+}
+.navbar .nav > li > a{
+   color:#000;
+   text-shadow:none;
+   padding:20px 10px;
+}
+.ui-tabs { position: relative; padding: .2em; zoom: 1; }
+.ui-tabs .ui-tabs-nav { margin: 0; padding: .2em .2em 0; }
+.ui-tabs .ui-tabs-nav li { list-style: none; float: left; position: relative; top: 1px; margin: 0 .2em 1px 0; border-bottom: 0 !important; padding: 0; white-space: nowrap; }
+.ui-tabs .ui-tabs-nav li a { float: left; padding: .5em 1em; text-decoration: none; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: 0; padding-bottom: 1px; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; }
+.ui-tabs .ui-tabs-panel { display: block; border-width: 0; padding: 1em 1.4em; background: none; }
+.ui-tabs .ui-tabs-hide { display: none !important; }
+.ui-widget-header { border: 1px solid whiteSmoke; background: whiteSmoke ; color: #ffffff; font-weight: bold; }

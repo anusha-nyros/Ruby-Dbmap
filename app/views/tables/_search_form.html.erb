@@ -1,0 +1,75 @@
+ <script type="text/javascript">
+	$(function() {
+		// Datepicker
+		$('#datepicker').datepicker({
+			//inline: true
+			dateFormat : 'mm/dd/yy'
+		});
+	$('#table_db_datab').change(function(){
+			$(this).closest('form').submit();
+			});
+
+
+	}); 
+</script>
+
+<div id="simple-search-form">
+	<%= search_form_for q,:url => search_tables_path, :html => {method: :post, class: 'well form-search'}  do |f| %>
+	<fieldset>
+		<%= f.text_field :environment_or_database_name_or_table_name_or_description_cont, class: "input-medium search-query" %>
+		<button type="submit" class="btn">
+			Search
+		</button>
+		&nbsp;&nbsp; <a href="#" id="advance-search">Advance</a>
+		<% end %>
+	</fieldset>
+	<div style="float:right;margin-top:-70px;margin-right:35px">
+	 <%= simple_form_for :table,:url => url_for(:action=>'index',:controller=>'tables'), method: :get,:html => {class: 'form-horizontal '}  do |f| %>
+		 <%= f.input :db_datab, as: :select, collection: Database.select(:db_name).map{|x| x.db_name}.insert(0,"All"), :prompt => "Select Database" ,:label =>'Database' %>
+
+	<% end %>
+      </div>
+</div>
+
+<div id="advance-search-form" style="display: none">
+	<%= search_form_for q,:url => search_tables_path, :html => {method: :post, class: 'form-horizontal'}  do |f| %>
+	<fieldset>
+		<legend>
+			Search Table
+		</legend>
+		<div class="control-group">
+			<%= f.label :environment_cont, "Environment", class: 'control-label' %>
+			<div class="controls">
+				<%= f.text_field :environment_cont %>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<%= f.label :database_name_cont, "Database", class: 'control-label' %>
+			<div class="controls">
+				<%= f.text_field :database_name_cont %>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<%= f.label :ofrows_eq, "Of Rows", class: 'control-label' %>
+			<div class="controls">
+				<%= f.text_field :ofrows_eq %>
+			</div>
+		</div>
+		<div class="control-group">
+			<%= f.label :ofcolumns_eq, "Of Columns", class: 'control-label' %>
+			<div class="controls">
+				<%= f.text_field :ofcolumns_eq%>
+			</div>
+		</div>
+
+		<div class="form-actions">
+			<%= f.submit class: 'btn btn-primary' %>
+			<input type="reset" class='btn'>
+			</input>
+			<a href="#" id="advance-search">Simple</a>
+		</div>
+	</fieldset>
+	<% end %>
+</div>

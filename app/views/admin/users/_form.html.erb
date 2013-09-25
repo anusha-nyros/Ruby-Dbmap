@@ -1,0 +1,61 @@
+<script type="text/javascript">
+  $('document').ready(function(){
+      $('#myuserform').submit(function(e){
+              
+  if ( $('#mypassword').val() != $('#mypassword_confirm').val())       {               
+ 		  $('#mypassword').css("border","1px solid red");
+			$('#mypassword_confirm').css("border","1px solid red");
+             $('.mypasswordalert').show();         
+            return false;  
+                                   
+                }     
+            else{
+                           $('#myuserform').submit();           
+                }
+        });
+	 $('.close').click(function(){
+        $(this).parent().fadeOut('slow');       
+    })
+  })
+
+</script>
+<div class="alert alert-error mypasswordalert" style="display:none">
+       <a class="close">x</a>
+          Password and Confirm Password doesnt match
+</div>
+<%= simple_form_for [:admin, @user], html: {class: 'form-horizontal'} do |f| -%>
+  <%= f.error_notification %>
+  <fieldset>
+    <legend>User Form</legend>
+    
+    <%= f.input :username, hint: 'Username required for login and are case sensitive. minimum 5 characters'%>
+    <%= f.input :name %>
+    <%= f.input :email %>
+    <%= f.input :active %>
+    <%= f.input :admin %>
+
+    
+    <div class="well">  
+      <%= f.input :password %>
+      <%= f.input :password_confirmation %>
+    </div>
+    
+    <div class="form-actions">
+        <%= f.button :submit, class: 'btn btn-primary' %>
+        <%= submit_tag "Reset", class: 'btn', type: 'reset' %>
+    </div>
+  </fieldset>
+<% end -%>
+<style>
+.active_style {
+ margin-top:10px;
+}
+.spacing {
+margin :10px;}
+.rightspace {
+  margin-right:10px;
+}
+.leftspace {
+  margin-right:100px;
+}
+</style>

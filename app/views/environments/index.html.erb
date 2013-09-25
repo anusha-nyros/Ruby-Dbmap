@@ -1,0 +1,35 @@
+
+<div class="categories">
+  <p><%= link_to "New Environment", new_environment_path, class: 'btn btn-primary btn-medium' %></p>
+
+  <% if @environments.blank? %>
+    <div class="well">Currently you don't have any environments.</div>
+  <% else %>
+    <h1>Environments</h1>
+
+    <div class="span7">
+    <table class="table table-striped" >
+
+      <tr>
+        <th class="span2">Environment</th>
+        <th class="span2">Name</th>
+      <th class="span2">Notes</th>
+        <th class="span3"></th>
+      </tr>
+    <% @environments.each do |environment| %>
+     <tr>
+        <td><%= environment.db_environment %></td>
+        <td><%= environment.db_environment_name %></td>
+  <td><%= environment.notes%></td>
+        <td >
+          <%= link_to 'Details', environment, class: 'btn btn-mini' %>
+          <%= link_to 'Edit', edit_environment_path(environment), class: 'btn btn-mini' %>
+          <%= link_to 'Destroy', environment, confirm: 'Are you sure?', method: :delete, class: 'btn btn-mini btn-danger' %>
+        </td>
+     </tr>
+    <% end %>
+    </table></div>
+
+  <% end %> 
+</div>
+

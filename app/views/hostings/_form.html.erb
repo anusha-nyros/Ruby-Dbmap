@@ -1,0 +1,29 @@
+
+<style>
+	.notes_label{
+          font-weight: bold;	
+	}
+</style>
+<%= simple_form_for(@hosting) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :env_id,:label => 'Environment ID' %>
+    <%= f.input :inst_id,:label => 'Instance ID' %>
+    <%= f.input :db_hosting,:label => 'Environment' %>
+    <%= f.input :db_hosting_name ,:label => 'Name'%>
+    <%= f.input :os,:label => 'OS' %>
+    <%= f.input :ip,:label => 'IP' %>
+    <%= f.input :apps,:label => 'Apps', input_html: {rows: '3', class: 'span7'} %>
+    <%= f.input :description,:label => 'Description', input_html: {rows: '6', class: 'span7'} %>
+    <%= f.input :notes,:label =>'Notes', input_html: {rows: '6', class: 'span7'},label_html:{class: 'notes_label'} %>
+  </div>
+
+  <div class="form-actions">
+  <% if controller.action_name == "new" %>
+  <%= f.submit "Create Instance", class: 'btn btn-primary' %>
+  <% else %>
+  <%= f.submit "Update Instance", class: 'btn btn-primary' %>
+  <% end %>
+  </div>
+<% end %>

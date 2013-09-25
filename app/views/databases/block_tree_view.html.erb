@@ -1,0 +1,41 @@
+
+<%= form_for :websit, :url => url_for(:controller => 'databases',:action => 'block_tree_view'), :remote => true, "data-type" => '', :html => {method: :post, class: 'form-horizontal', :name => "appli_form",:id => "aj",:multipart => true} do |f| %>
+		<input type="hidden" name="id" value="<%=@conn_str.id%> "/>
+	<span class="pull-right" style="margin-top:-40px;margin-right:200px;">
+<input type="radio" name="theme" class="type" value="alpha_view" class="alpha" checked />Alpha &nbsp;
+<input type="radio" name="theme" class="type" value="type_view"/>Type&nbsp; 
+<input type="radio" name="theme" class="type" value="mod_view"/>Module/Feature&nbsp;
+<input type="checkbox" value="show_active"  class = "type" name="active" id="<%= @conn_str.id %>"  >&nbsp;Active Only</input>&nbsp;
+</span>
+<%end%>
+<div style="font-size: 21px;line-height: 49px;"> <%= @conn_str.db_name %>-Tree View</div>
+<div id="chang">
+	<%= render :partial => 'schema' %>
+</div>
+
+<script>
+	$(document).ready(function (){
+		//	$('#th').submit();
+		// $("input[name='theme']").change(function() {
+			$('.type').bind("change", function(){
+		
+			         $('#aj').submit();
+		
+		});
+			$('#36').change(function(){
+			if($('#36').attr('checked')) {
+   				 $("#type").val(true);
+			         $('#aj').submit();
+				 } else {
+   				 $("#type").val(false);
+			         $('#aj').submit();
+			}
+		});
+
+
+
+
+ });
+
+
+</script>
